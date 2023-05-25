@@ -5,21 +5,21 @@ Bu proje, bir otomat makinesini temsil eden basit bir React uygulamasıdır. Bu 
 
 ## Özellikler
 
--Ürün listesini görüntüleme: Kullanıcı, mevcut ürünlerin fiyatlarını, stok durumlarını, satın alma kodunu ve görüntüsünü görüntüleyebilir.
+- Ürün listesini görüntüleme: Kullanıcı, mevcut ürünlerin fiyatlarını, stok durumlarını, satın alma kodunu ve görüntüsünü görüntüleyebilir.
 
--Para ekleme: Kullanıcı, 1-5-10-20 miktarlarında parayı makineye ekleyebilir.
+- Para ekleme: Kullanıcı, 1-5-10-20 miktarlarında parayı makineye ekleyebilir.
 
--Ürün seçme: Kullanıcı, mevcut bakiyesine göre bir ürün seçebilir. Seçtiği ürünün satın alma kodunun bulunduğu butona basarak ürünü satın alabilir.
+- Ürün seçme: Kullanıcı, mevcut bakiyesine göre bir ürün seçebilir. Seçtiği ürünün satın alma kodunun bulunduğu butona basarak ürünü satın alabilir.
 
--Satın alma işlemi: Kullanıcı, seçilen ürünü satın alabilir ve bakiyesinden ürünün fiyatı düşülür.
+- Satın alma işlemi: Kullanıcı, seçilen ürünü satın alabilir ve bakiyesinden ürünün fiyatı düşülür.
 
--Para iadesi: Kullanıcı, kullanılmayan bakiyesini geri alabilir.
+- Para iadesi: Kullanıcı, kullanılmayan bakiyesini geri alabilir.
 
--Tedarikçi işlemleri: Tedarikçi, makineden biriken parayı alabilir, makineye reset atabilir, makinenin ışığını açıp kapatabilir, ürünlerin bozulmaması için makinede bulunan klimanın ayarlarında değişiklik yapabilir ve makineye stok yenilemesinde bulunabilir.
+- Tedarikçi işlemleri: Tedarikçi, makineden biriken parayı alabilir, makineye reset atabilir, makinenin ışığını açıp kapatabilir, ürünlerin bozulmaması için makinede bulunan klimanın ayarlarında değişiklik yapabilir ve makineye stok yenilemesinde bulunabilir.
 
--Enerji Hakkında: Işık 2 birim enerji, Robot Kol işlem başına 0.1 birim enerji, klima ise birim başına 0.5 birim enerji harcamaktadır. Enerji maksimum 5birim/saat olabilir. Her saat enerji kendi kendine yenilenmektedir.
+- Enerji Hakkında: Işık 2 birim enerji, Robot Kol işlem başına 0.1 birim enerji, klima ise birim başına 0.5 birim enerji harcamaktadır. Enerji maksimum 5birim/saat olabilir. Her saat enerji kendi kendine yenilenmektedir.
 
--Timer Hakkında: Kullanıcı işleme başladığı saniyeden itibaren makinenin sağ üst kısmında bulunan zaman sayacı çalışmaya başlar ve süre bitene kadar müşterinin işlem yapmasına izin verir. Süre bittikten sonra otomatik olarak makineye reset atar. Eğer kullanıcının parası makinede bulunuyorsa, iade eder.
+- Timer Hakkında: Kullanıcı işleme başladığı saniyeden itibaren makinenin sağ üst kısmında bulunan zaman sayacı çalışmaya başlar ve süre bitene kadar müşterinin işlem yapmasına izin verir. Süre bittikten sonra otomatik olarak makineye reset atar. Eğer kullanıcının parası makinede bulunuyorsa, iade eder.
 
 ## Kullanım
 ### `git clone https://github.com/ilkekarakas/vending-machine.git`
