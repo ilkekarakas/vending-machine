@@ -19,11 +19,11 @@ function InputCoin({
     setTotal(newTotal);
     onCoinChanged(newTotal);
     setTimerIsActive(true);
-    if (timerCount < 50 && timerCount !== 0) {
+    if (timerCount < 300 && timerCount !== 0) {
       setTimerCount(timerCount);
     } else {
       setTimerIsActive(true);
-      setTimerCount(50); // 5 dakika (300 saniye)
+      setTimerCount(300); // 5 dakika (300 saniye)
     }
   };
 
