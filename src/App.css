@@ -1,0 +1,697 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.imgStyle {
+  height: 35px;
+  flex-grow: 1;
+}
+
+.cabinet {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.box {
+  border: 1px solid LIGHTSEAGREEN;
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 2px;
+  margin-top: 2px;
+}
+
+.productName {
+  font-size: 0.8em;
+  text-align: center;
+}
+
+.price {
+  text-align: center;
+}
+
+.container {
+  width: 350px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.coin-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 200px;
+  height: 120px;
+}
+
+.coin-item {
+  font-size: 1.5em;
+  margin: 5px 15px 0 15px;
+  padding: 5px;
+  background-color: skyblue;
+  color: DARKGREEN;
+  width: 60px;
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.coin {
+  margin-top: 15px;
+}
+
+.coin-total {
+  font-size: 1.5em;
+  margin: 25px 15px 0 15px;
+  padding: 5px;
+  text-align: center;
+  background-color: LIMEGREEN;
+  color: white;
+  width: 200px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.product-supplier {
+  font-size: 1.5em;
+  margin: 25px 15px 0 15px;
+  padding: 5px;
+  text-align: center;
+  background-color: RED;
+  color: white;
+  width: 200px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+/* // */
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.page-wrap {
+  height: 100vh;
+  position: relative;
+  padding: 75px 15px 50px 15px;
+  background-color: #fafafa;
+}
+
+.vend-outer {
+  width: 550px;
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.3);
+  margin: auto;
+  height: 500px;
+  background-color: #e7263b;
+  padding: 20px;
+  position: relative;
+  border-radius: 5px;
+  z-index: 9999;
+}
+
+.display-box {
+  position: absolute;
+  bottom: 22px;
+  left: 15px;
+  right: 15px;
+  height: 25px;
+  padding: 0px 12px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.display {
+  flex-basis: 75px;
+  background-color: #333;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #000000;
+  box-shadow: inset 0 0 10px #000000;
+  color: goldenrod;
+  align-self: Stretch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pay-box {
+  position: absolute;
+  top: 120px;
+  right: 10px;
+  background-color: #333;
+  box-shadow: inset 0 0 10px #000000;
+  width: 135px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border-radius: 5px;
+}
+
+.temprature-box {
+  position: absolute;
+  top: 90px;
+  right: 35px;
+  background-color: #333;
+  width: 82px;
+  height: 25px;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #000000;
+  box-shadow: inset 0 0 10px #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ddd;
+}
+
+.temprature-plus {
+  position: absolute;
+  top: 90px;
+  right: 7px;
+  background-color: #333;
+  width: 25px;
+  height: 25px;
+  box-shadow: inset 0 0 10px green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.temprature-minus {
+  position: absolute;
+  top: 90px;
+  right: 120px;
+  background-color: #333;
+  width: 25px;
+  height: 25px;
+  box-shadow: inset 0 0 10px red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.coin-box {
+  position: absolute;
+  right: 10px;
+  top: 150px;
+  width: 130px;
+  height: 25px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.coin-outter {
+  background-color: #ddd;
+  width: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666666;
+  border-radius: 100%;
+  border: 1px dotted #696969;
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.help-box {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #333;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+}
+
+.coin-outter:active {
+  box-shadow: none;
+}
+
+.timer-box {
+  position: absolute;
+  right: 10px;
+  top: 19px;
+  background-color: #333;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #000000;
+  box-shadow: inset 0 0 10px #000000;
+  width: 135px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: goldenrod;
+  border-radius: 5px;
+}
+
+.energy-box {
+  position: absolute;
+  right: 250px;
+  top: 19px;
+  background-color: #333;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #000000;
+  box-shadow: inset 0 0 10px #000000;
+  width: 200px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: goldenrod;
+  border-radius: 5px;
+}
+
+.machine-total-price {
+  position: absolute;
+  right: 10px;
+  top: 60px;
+  background-color: #333;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #000000;
+  box-shadow: inset 0 0 10px #000000;
+  width: 135px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: goldenrod;
+  border-radius: 5px;
+}
+
+.soda-text {
+  margin-top: 15px;
+}
+
+.water-box {
+  position: absolute;
+  top: 0;
+  left: 37px;
+  width: 45px;
+  height: 100%;
+}
+
+.coke-box {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 168px;
+}
+
+.soda-box {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 65px;
+}
+
+.chocolate-box {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100px;
+}
+
+.product,
+.grab-soda {
+  position: absolute;
+  z-index: 999;
+  height: 30px;
+  width: 26px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3);
+}
+
+.return-box {
+  position: absolute;
+  top: 300px;
+  right: 8px;
+  background-color: #333;
+  width: 135px;
+  height: 23px;
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  text-align: -webkit-center;
+  color: white;
+}
+
+.return-box:active {
+  box-shadow: none;
+}
+
+.stock-box {
+  position: absolute;
+  top: 510px;
+  right: 8px;
+  background-color: #333;
+  width: 135px;
+  height: 23px;
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  text-align: -webkit-center;
+  color: white;
+}
+
+.stock-box:active {
+  box-shadow: none;
+}
+
+.check-out-box {
+  position: absolute;
+  top: 325px;
+  right: 8px;
+  background-color: #333;
+  width: 135px;
+  height: 23px;
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  text-align: -webkit-center;
+  color: white;
+}
+
+.check-out-box:active {
+  box-shadow: none;
+}
+
+.on-product-check-out-box {
+  position: absolute;
+  top: 350px;
+  right: 8px;
+  background-color: #333;
+  width: 135px;
+  height: 23px;
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  text-align: -webkit-center;
+  color: white;
+}
+
+.on-product-check-out-box:active {
+  box-shadow: none;
+}
+
+.coke {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  bottom: 0;
+  left: 0;
+}
+
+.sprite {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  bottom: 0;
+  left: 0;
+}
+
+.chocolate {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  bottom: 0;
+  left: 43px;
+}
+
+.water {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  bottom: 0;
+  left: 0px;
+  transition: all 0.5s;
+}
+
+.price-box {
+  color: #ddd;
+  position: absolute;
+  z-index: 99;
+}
+
+.coke-price {
+  top: 85px;
+  left: 248px;
+}
+
+.water-price {
+  top: 85px;
+  left: 40px;
+}
+
+.chocolate-price {
+  top: 85px;
+  left: 152px;
+}
+
+.sprite-price {
+  top: 85px;
+  right: 45px;
+}
+
+.touch-pad {
+  background-color: #333;
+  position: absolute;
+  right: 1%;
+  top: 35%;
+  width: 135px;
+  height: 100px;
+  display: flex;
+  flex-wrap: wrap;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #000000;
+  box-shadow: inset 0 0 10px #000000;
+  border-radius: 5px;
+}
+
+.button {
+  border: 1px solid #444;
+  flex-basis: calc(50% - 2px);
+  color: #ddd;
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.button:active {
+  background-color: #555;
+}
+
+.button p {
+  margin: 0;
+}
+
+.vend-back {
+  background-color: #000;
+  position: relative;
+  height: 90%;
+  width: 75%;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #000000;
+  box-shadow: inset 0 0 10px #000000;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.product-row {
+  background-color: #111;
+  border-bottom: 4px solid black;
+  height: 81px;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #000000;
+  box-shadow: inset 0 0 10px #000000;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  position: relative;
+}
+
+.product-row .tag {
+  position: absolute;
+  color: #aaa;
+}
+
+.product-row .tag-water {
+  left: 40px;
+  top: 0;
+}
+
+.product-row .tag-chocolate {
+  left: 146px;
+  top: 0;
+}
+
+.product-row .tag-coke {
+  left: 245px;
+  top: 0;
+}
+
+.product-row .tag-soda {
+  left: 351px;
+  top: 0;
+}
+
+.spiral {
+  background: transparent;
+  border: 2px solid silver;
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9;
+}
+
+.inner-spiral {
+  width: 60%;
+  height: 60%;
+  border: 2px solid silver;
+  border-radius: 100%;
+  z-index: 8;
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vend-glass-open {
+  background: rgba(255, 255, 255, 0.25);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  border-radius: 5px;
+}
+
+.vend-glass-close {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  border-radius: 5px;
+}
+
+.message-box {
+  background-color: #333;
+  position: absolute;
+  right: 1%;
+  top: 70.5%;
+  width: 135px;
+  height: 120px;
+  display: flex;
+  flex-wrap: wrap;
+  -moz-box-shadow: inset 0 0 10px #000000;
+  -webkit-box-shadow: inset 0 0 10px #000000;
+  box-shadow: inset 0 0 10px #000000;
+  border-radius: 5px;
+  z-index: 99;
+  overflow: hidden;
+}
+
+.bottom-box {
+  padding-top: 150px;
+  background-color: #70d3d0;
+  border-top: 1px solid #ddd;
+  padding: 25px;
+  text-align: center;
+  color: #fff;
+  z-index: 9999;
+}
+
+.heart,
+.bottom-box a {
+  color: #e7263b;
+  text-decoration: none;
+}
+
+*,
+::after,
+::before {
+  box-sizing: content-box;
+}
+
+.timer-count-text {
+  margin-top: 5px;
+}
+
+.energy-text {
+  margin-top: 5px;
+}
+
+.message {
+  color: white;
+  font-size: 13px;
+  word-break: break-all;
+  padding: 5px;
+}
+
+.product-stock {
+  color: white;
+  margin-bottom: 35px;
+}
