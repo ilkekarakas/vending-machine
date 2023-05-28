@@ -50,4 +50,7 @@ Komutunu kullandığınız zaman [http://localhost:3000](http://localhost:3000) 
 ## Deploy - Demo
 
 
-### `demo linki buraya eklenecek.`
+### `https://vending-machine-ilke-karakas.herokuapp.com/`
+
+
+Yukarıdaki bağlantıya tıklayarak demo Vending Machine'ye erişebilirsiniz.
