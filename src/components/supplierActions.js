@@ -47,6 +47,8 @@ function SupplierActions({
           break;
       }
     });
+
+    setMessage("Stoklar başarıyla yenilendi!");
   };
 
   return (
