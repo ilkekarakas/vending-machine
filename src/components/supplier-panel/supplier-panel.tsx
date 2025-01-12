@@ -15,6 +15,9 @@ const SupplierPanel: React.FC = () => {
     const [password, setPassword] = useState('');
     const [refillAmount, setRefillAmount] = useState<number>(5);
     const [showResetConfirm, setShowResetConfirm] = useState(false);
+    const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
+    const [attemptCount, setAttemptCount] = useState(0);
+    const [cooldownEndTime, setCooldownEndTime] = useState<number | null>(null);
 
     const {
         components,
@@ -22,6 +25,7 @@ const SupplierPanel: React.FC = () => {
     } = useSelector((state: RootState) => state.machine);
     const {
         totalSales,
+        products,
     } = useSelector((state: RootState) => state.product);
 
     const {
@@ -54,10 +58,19 @@ const SupplierPanel: React.FC = () => {
             toast.error('Please enter a valid amount');
             return;
         }
-        dispatch(refillStock(refillAmount));
-        toast.success(`Added ${refillAmount} items to each product`);
+        if (refillAmount > 50) {
+            toast.error('Maximum refill amount is 50');
+            return;
+        }
+        dispatch(refillStock({ productId: selectedProductId, amount: refillAmount }));
+        toast.success(
+            selectedProductId === null
+                ? `Added ${refillAmount} items to each product`
+                : `Added ${refillAmount} items to ${products.find(p => p.id === selectedProductId)?.name}`
+        );
         setShowRefillModal(false);
-        setRefillAmount(5); // Reset to default
+        setRefillAmount(5);
+        setSelectedProductId(null);
     };
 
     const handleRefillAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,13 +93,32 @@ const SupplierPanel: React.FC = () => {
     };
 
     const handlePasswordSubmit = () => {
+        const now = Date.now();
+        
+        if (cooldownEndTime && now < cooldownEndTime) {
+            const remainingSeconds = Math.ceil((cooldownEndTime - now) / 1000);
+            toast.error(`Please wait ${remainingSeconds} seconds before trying again`);
+            return;
+        }
+
         if (password === 'aselsan') {
             dispatch(toggleSupplierMode());
             setShowPasswordModal(false);
             setPassword('');
+            setAttemptCount(0);
+            setCooldownEndTime(null);
             toast.success('Supplier mode activated');
         } else {
-            toast.error('Incorrect password');
+            const newAttemptCount = attemptCount + 1;
+            setAttemptCount(newAttemptCount);
+            
+            if (newAttemptCount >= 3) {
+                setCooldownEndTime(now + 20000); // 20 seconds cooldown
+                setAttemptCount(0);
+                toast.error('Too many failed attempts. Notification sent to supplier. Please wait 20 seconds.');
+            } else {
+                toast.error(`Incorrect password. ${3 - newAttemptCount} attempts remaining`);
+            }
         }
     };
 
@@ -152,6 +184,13 @@ const SupplierPanel: React.FC = () => {
                     <div className="money-box">
                         <h4>Total Sales History</h4>
                         <div className="amount">📊 {totalSales} units</div>
+                        <div className="product-sales">
+                            {products.map(product => (
+                                <div key={product.id} className="product-sale-item">
+                                    {product.name}: {product.salesCount} total sales
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             )}
@@ -183,7 +222,11 @@ const SupplierPanel: React.FC = () => {
                             <div
                                 className="button"
                                 onClick={handlePasswordSubmit}
-                                style={{ background: '#27AE60' }}
+                                style={{ 
+                                    background: '#27AE60',
+                                    opacity: cooldownEndTime && Date.now() < cooldownEndTime ? '0.5' : '1',
+                                    cursor: cooldownEndTime && Date.now() < cooldownEndTime ? 'not-allowed' : 'pointer'
+                                }}
                             >
                                 Submit
                             </div>
@@ -196,7 +239,20 @@ const SupplierPanel: React.FC = () => {
                 <div className="confirm-dialog">
                     <div className="confirm-dialog__box">
                         <h3>📦 Refill Stock</h3>
-                        <p>Enter the number of items to add to each product:</p>
+                        <p>Select product and enter amount to refill:</p>
+                        <select 
+                            className="refill-input"
+                            value={selectedProductId === null ? '' : selectedProductId}
+                            onChange={(e) => setSelectedProductId(e.target.value ? Number(e.target.value) : null)}
+                            style={{ marginBottom: '10px' }}
+                        >
+                            <option value="">All Products</option>
+                            {products.map(product => (
+                                <option key={product.id} value={product.id}>
+                                    {product.name} (Current Stock: {product.stock})
+                                </option>
+                            ))}
+                        </select>
                         <input
                             type="number"
                             className="refill-input"
@@ -214,6 +270,7 @@ const SupplierPanel: React.FC = () => {
                                 onClick={() => {
                                     setShowRefillModal(false);
                                     setRefillAmount(5);
+                                    setSelectedProductId(null);
                                 }}
                             >
                                 Cancel

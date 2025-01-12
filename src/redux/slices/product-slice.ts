@@ -9,6 +9,7 @@ const initialState: ProductState = {
       price: 25,
       image: '/vending-machine/images/water.png',
       stock: 5,
+      salesCount: 0,
     },
     {
       id: 2,
@@ -16,6 +17,7 @@ const initialState: ProductState = {
       price: 35,
       image: '/vending-machine/images/coke.png',
       stock: 3,
+      salesCount: 0,
     },
     {
       id: 3,
@@ -23,6 +25,7 @@ const initialState: ProductState = {
       price: 45,
       image: '/vending-machine/images/soda.png',
       stock: 2,
+      salesCount: 0,
     }
   ],
   selectedProduct: null,
@@ -40,12 +43,22 @@ const productSlice = createSlice({
       const product = state.products.find(p => p.id === action.payload);
       if (product && product.stock > 0) {
         product.stock -= 1;
+        product.salesCount += 1;
       }
     },
-    refillStock: (state, action: PayloadAction<number>) => {
-      state.products.forEach(product => {
-        product.stock += action.payload;
-      });
+    refillStock: (state, action: PayloadAction<{productId: number | null, amount: number}>) => {
+      if (action.payload.productId === null) {
+        // Refill all products
+        state.products.forEach(product => {
+          product.stock += action.payload.amount;
+        });
+      } else {
+        // Refill specific product
+        const product = state.products.find(p => p.id === action.payload.productId);
+        if (product) {
+          product.stock += action.payload.amount;
+        }
+      }
     },
     updateTotalSales: (state, action: PayloadAction<number>) => {
       state.totalSales += action.payload;

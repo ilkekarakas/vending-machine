@@ -186,25 +186,41 @@
 }
 
 .money-box {
-  background: #34495e;
+  background: #2c3e50;
   padding: 15px;
   border-radius: 8px;
-  text-align: center;
+  margin: 10px;
+  flex: 1;
+  min-width: 200px;
 
   h4 {
-    margin: 0 0 10px 0;
-    color: #1abc9c;
-    font-size: 0.9em;
+    margin: 0;
+    color: #3498db;
   }
 
   .amount {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: white;
+    font-size: 1.5em;
+    margin: 10px 0;
+    color: #2ecc71;
   }
 
-  @media (max-width: 768px) {
-    padding: 12px;
+  .product-sales {
+    margin-top: 15px;
+    border-top: 1px solid #34495e;
+    padding-top: 10px;
+  }
+
+  .product-sale-item {
+    color: #ecf0f1;
+    padding: 5px 0;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #34495e;
+    }
   }
 }
 
