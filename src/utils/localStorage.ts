@@ -6,12 +6,9 @@ export const loadState = () => {
         }
         const state = JSON.parse(serializedState);
         
-        // Reset timer-related states when loading
-        if (state.supplier?.cooldownEndTime) {
-            state.supplier.cooldownEndTime = null;
-        }
-        if (state.supplier?.attemptCount) {
-            state.supplier.attemptCount = 0;
+        // Her sayfa yüklenişinde supplier modu kapalı başlat
+        if (state.machine) {
+            state.machine.isSupplierMode = false;
         }
 
         // Reset payment processing states
@@ -33,7 +30,7 @@ export const loadState = () => {
                 }
             }
         }
-        
+
         return state;
     } catch (err) {
         return undefined;

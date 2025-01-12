@@ -16,8 +16,15 @@ const SupplierPanel: React.FC = () => {
     const [refillAmount, setRefillAmount] = useState<number>(5);
     const [showResetConfirm, setShowResetConfirm] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
-    const [attemptCount, setAttemptCount] = useState(0);
-    const [cooldownEndTime, setCooldownEndTime] = useState<number | null>(null);
+    const [attemptCount, setAttemptCount] = useState(() => {
+        const saved = localStorage.getItem('passwordAttempts');
+        return saved ? parseInt(saved) : 0;
+    });
+    const [cooldownEndTime, setCooldownEndTime] = useState<number | undefined>(() => {
+        const saved = localStorage.getItem('cooldownEndTime');
+        const time = saved ? parseInt(saved) : undefined;
+        return time && time > Date.now() ? time : undefined;
+    });
 
     const {
         components,
@@ -33,6 +40,13 @@ const SupplierPanel: React.FC = () => {
     } = useSelector((state: RootState) => state.payment);
 
     const handleToggleSupplierMode = () => {
+        const now = Date.now();
+        if (cooldownEndTime && now < cooldownEndTime) {
+            const remainingSeconds = Math.ceil((cooldownEndTime - now) / 1000);
+            toast.error(`Please wait ${remainingSeconds} seconds before trying again`);
+            return;
+        }
+
         if (!isSupplierMode) {
             setShowPasswordModal(true);
         } else {
@@ -93,28 +107,28 @@ const SupplierPanel: React.FC = () => {
     };
 
     const handlePasswordSubmit = () => {
-        const now = Date.now();
-        
-        if (cooldownEndTime && now < cooldownEndTime) {
-            const remainingSeconds = Math.ceil((cooldownEndTime - now) / 1000);
-            toast.error(`Please wait ${remainingSeconds} seconds before trying again`);
-            return;
-        }
-
         if (password === 'aselsan') {
             dispatch(toggleSupplierMode());
             setShowPasswordModal(false);
             setPassword('');
             setAttemptCount(0);
-            setCooldownEndTime(null);
+            setCooldownEndTime(undefined);
+            localStorage.removeItem('passwordAttempts');
+            localStorage.removeItem('cooldownEndTime');
             toast.success('Supplier mode activated');
         } else {
             const newAttemptCount = attemptCount + 1;
             setAttemptCount(newAttemptCount);
+            localStorage.setItem('passwordAttempts', newAttemptCount.toString());
             
             if (newAttemptCount >= 3) {
-                setCooldownEndTime(now + 20000); // 20 seconds cooldown
+                const newCooldownTime = Date.now() + 20000;
+                setCooldownEndTime(newCooldownTime);
+                localStorage.setItem('cooldownEndTime', newCooldownTime.toString());
                 setAttemptCount(0);
+                localStorage.setItem('passwordAttempts', '0');
+                setShowPasswordModal(false);
+                setPassword('');
                 toast.error('Too many failed attempts. Notification sent to supplier. Please wait 20 seconds.');
             } else {
                 toast.error(`Incorrect password. ${3 - newAttemptCount} attempts remaining`);
@@ -123,16 +137,10 @@ const SupplierPanel: React.FC = () => {
     };
 
     useEffect(() => {
-        if (!showPasswordModal) {
-            setAttemptCount(0);
-            setCooldownEndTime(null);
-        }
-    }, [showPasswordModal]);
-
-    useEffect(() => {
         if (cooldownEndTime) {
             const timeoutId = setTimeout(() => {
-                setCooldownEndTime(null);
+                setCooldownEndTime(undefined);
+                localStorage.removeItem('cooldownEndTime');
             }, cooldownEndTime - Date.now());
 
             return () => clearTimeout(timeoutId);
@@ -157,6 +165,11 @@ const SupplierPanel: React.FC = () => {
                 <button
                     className={`supplier-button ${isSupplierMode ? 'is-active' : ''}`}
                     onClick={handleToggleSupplierMode}
+                    disabled={!!(cooldownEndTime && Date.now() < cooldownEndTime)}
+                    style={{ 
+                        opacity: cooldownEndTime && Date.now() < cooldownEndTime ? 0.5 : 1.0,
+                        cursor: cooldownEndTime && Date.now() < cooldownEndTime ? 'not-allowed' : 'pointer'
+                    }}
                 >
                     {isSupplierMode ? '🔓 Exit Supplier Mode' : '🔐 Enter Supplier Mode'}
                 </button>
@@ -239,11 +252,7 @@ const SupplierPanel: React.FC = () => {
                             <div
                                 className="button"
                                 onClick={handlePasswordSubmit}
-                                style={{ 
-                                    background: '#27AE60',
-                                    opacity: cooldownEndTime && Date.now() < cooldownEndTime ? '0.5' : '1',
-                                    cursor: cooldownEndTime && Date.now() < cooldownEndTime ? 'not-allowed' : 'pointer'
-                                }}
+                                style={{ background: '#27AE60' }}
                             >
                                 Submit
                             </div>

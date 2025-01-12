@@ -10,8 +10,6 @@ import StatusBar from './status-bar/status-bar';
 import EnvironmentStatus from './environment-status/environment-status';
 import './vending-machine.scss';
 
-
-
 const VendingMachine: React.FC = () => {
   const dispatch = useDispatch();
 
@@ -68,32 +66,44 @@ const VendingMachine: React.FC = () => {
   }, [energyConsumption]);
 
   return (
-      <div className="vending-machine-container">
+    <div className="vending-machine-container">
+      <div className="header-section">
         <h1 className="header">Vending Machine</h1>
-        <VendingMachineBody />
-        <StatusBar />
-        <EnvironmentStatus />
-        <SupplierPanel />
-
-        {components.robotArm && (
-          <div className="dispensing-overlay">
-            <div className="robot">🤖</div>
-            Dispensing Your Product...
-          </div>
-        )}
-
-        {isProcessingPayment && (
-          <div className="processing-overlay">
-            Processing Payment
-          </div>
-        )}
-
-        <ToastContainer
-          position="top-right"
-          theme="dark"
-          className="toast-container"
-        />
+        <button
+          className="clear-cache-button"
+          onClick={() => {
+            localStorage.clear();
+            toast.success('Cache cleared! Page will reload...');
+            setTimeout(() => window.location.reload(), 1500);
+          }}
+        >
+          🗑️ Clear Cache
+        </button>
       </div>
+      <VendingMachineBody />
+      <StatusBar />
+      <EnvironmentStatus />
+      <SupplierPanel />
+
+      {components.robotArm && (
+        <div className="dispensing-overlay">
+          <div className="robot">🤖</div>
+          Dispensing Your Product...
+        </div>
+      )}
+
+      {isProcessingPayment && (
+        <div className="processing-overlay">
+          Processing Payment
+        </div>
+      )}
+
+      <ToastContainer
+        position="top-right"
+        theme="dark"
+        className="toast-container"
+      />
+    </div>
   );
 };
 

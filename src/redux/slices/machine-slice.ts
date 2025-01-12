@@ -11,7 +11,7 @@ const initialState: MachineState = {
   },
   machineTemperature: 10, // Starting at middle of normal range (8-12)
   isNightTime: false,
-  isSupplierMode: false,
+  isSupplierMode: false, // Always start with supplier mode off
 };
 
 const machineSlice = createSlice({
@@ -92,6 +92,11 @@ const machineSlice = createSlice({
     },
     toggleSupplierMode: (state) => {
       state.isSupplierMode = !state.isSupplierMode;
+      if (!state.isSupplierMode) {
+        // Reset machine state when exiting supplier mode
+        state.components = initialState.components;
+        state.energyConsumption = initialState.energyConsumption;
+      }
     },
     setNightTime: (state, action: PayloadAction<boolean>) => {
       state.isNightTime = action.payload;
