@@ -49,7 +49,7 @@ const ControlPanel: React.FC = () => {
     } else {
       setTimeLeft(null);
     }
-  }, [selectedProduct, insertedMoney, selectedPaymentMethod, isProcessingPayment]);
+  }, [selectedProduct, isProcessingPayment]);
 
   return (
     <div className="control-panel">
