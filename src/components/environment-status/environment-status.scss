@@ -1,0 +1,77 @@
+.environment-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background: #2c3e50;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    flex-wrap: wrap;
+  
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: #34495e;
+      min-width: 120px;
+      transition: all 0.3s ease;
+    }
+
+    .status-item {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      &.lights-on {
+        background: linear-gradient(120deg, #f1c40f, #f39c12);
+        color: #2c3e50;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 20px rgba(241, 196, 15, 0.4);
+        border: none;
+      }
+    }
+  
+    .temperature-status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      min-width: 150px;
+      font-size: 0.9em;
+      color: white;
+  
+      &.cooling {
+        background: linear-gradient(120deg, #3498db, #2980b9);
+        color: white;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+      }
+      &.heating {
+        background: linear-gradient(120deg, #e74c3c, #c0392b);
+        color: white;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+      }
+      &.optimal {
+        background: linear-gradient(120deg, #2ecc71, #27ae60);
+        color: white;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+      }
+    }
+  
+    @media (max-width: 768px) {
+      padding: 12px;
+      gap: 10px;
+  
+      span {
+        flex: 1;
+        min-width: 150px;
+        text-align: center;
+      }
+    }
+}

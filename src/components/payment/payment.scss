@@ -1,0 +1,34 @@
+.payment-section {
+  margin-top: 1rem;
+  background: #2c3e50;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+
+  h3 {
+    margin: 0 0 15px 0;
+    color: #1abc9c;
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  &.is-footer {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+

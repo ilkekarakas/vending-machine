@@ -1,0 +1,268 @@
+import { resetMachine, toggleComponent, toggleSupplierMode } from '../../redux/slices/machine-slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { collectMoney, resetPayment } from '../../redux/slices/payment-slice';
+import { toast } from 'react-toastify';
+import { refillStock, resetProducts } from '../../redux/slices/product-slice';
+import { useState } from 'react';
+import '../../assets/styles/common.scss';
+import './supplier-panel.scss';
+
+const SupplierPanel: React.FC = () => {
+    const dispatch = useDispatch();
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [showRefillModal, setShowRefillModal] = useState(false);
+    const [password, setPassword] = useState('');
+    const [refillAmount, setRefillAmount] = useState<number>(5);
+    const [showResetConfirm, setShowResetConfirm] = useState(false);
+
+    const {
+        components,
+        isSupplierMode,
+    } = useSelector((state: RootState) => state.machine);
+    const {
+        totalSales,
+    } = useSelector((state: RootState) => state.product);
+
+    const {
+        collectedMoney,
+    } = useSelector((state: RootState) => state.payment);
+
+    const handleToggleSupplierMode = () => {
+        if (!isSupplierMode) {
+            setShowPasswordModal(true);
+        } else {
+            dispatch(toggleSupplierMode());
+        }
+    };
+
+    const handleCollectMoney = () => {
+        if (collectedMoney > 0) {
+            toast.success(`Collected ${collectedMoney} units from machine`);
+            dispatch(collectMoney());
+        } else {
+            toast.info('No money to collect');
+        }
+    };
+
+    const handleRefillStock = () => {
+        setShowRefillModal(true);
+    };
+
+    const handleRefillSubmit = () => {
+        if (refillAmount <= 0) {
+            toast.error('Please enter a valid amount');
+            return;
+        }
+        dispatch(refillStock(refillAmount));
+        toast.success(`Added ${refillAmount} items to each product`);
+        setShowRefillModal(false);
+        setRefillAmount(5); // Reset to default
+    };
+
+    const handleRefillAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (value === '') {
+            setRefillAmount(0);
+        } else {
+            const numValue = parseInt(value);
+            if (!isNaN(numValue)) {
+                setRefillAmount(numValue);
+            }
+        }
+    };
+
+    const handleReset = () => {
+        dispatch(resetProducts());
+        dispatch(resetPayment());
+        dispatch(resetMachine());
+        toast.success('Machine has been reset');
+    };
+
+    const handlePasswordSubmit = () => {
+        if (password === 'aselsan') {
+            dispatch(toggleSupplierMode());
+            setShowPasswordModal(false);
+            setPassword('');
+            toast.success('Supplier mode activated');
+        } else {
+            toast.error('Incorrect password');
+        }
+    };
+
+    const handlePasswordKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handlePasswordSubmit();
+        }
+    };
+
+    const handleRefillKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleRefillSubmit();
+        }
+    };
+
+    return (
+        <div className='supplier-panel'>
+            <div>
+                <button
+                    className={`supplier-button ${isSupplierMode ? 'is-active' : ''}`}
+                    onClick={handleToggleSupplierMode}
+                >
+                    {isSupplierMode ? '🔓 Exit Supplier Mode' : '🔐 Enter Supplier Mode'}
+                </button>
+
+                {isSupplierMode && (
+                    <div className="supplier-button-group">
+                        <button
+                            className="supplier-button"
+                            onClick={handleCollectMoney}
+                            disabled={collectedMoney === 0}
+                        >
+                            💰 Collect Money
+                        </button>
+
+                        <button className="supplier-button" onClick={handleRefillStock}>
+                            📦 Refill Stock
+                        </button>
+
+                        <button
+                            className="supplier-button is-warning"
+                            onClick={() => setShowResetConfirm(true)}
+                        >
+                            🔄 Reset Machine
+                        </button>
+
+                        <button
+                            className={`supplier-button ${components.lights ? 'is-active' : ''}`}
+                            onClick={() => dispatch(toggleComponent('lights'))}
+                        >
+                            {components.lights ? '💡 Turn Off Lights' : '🔦 Turn On Lights'}
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            {isSupplierMode && (
+                <div className="money-display">
+                    <div className="money-box">
+                        <h4>Current Machine Balance</h4>
+                        <div className="amount">💵 {collectedMoney} units</div>
+                    </div>
+                    <div className="money-box">
+                        <h4>Total Sales History</h4>
+                        <div className="amount">📊 {totalSales} units</div>
+                    </div>
+                </div>
+            )}
+
+            {showPasswordModal && (
+                <div className="password-modal">
+                    <div className="modal-content">
+                        <h3 className="modal-title">🔒 Enter Supplier Password</h3>
+                        <input
+                            className="password-input"
+                            type="password"
+                            placeholder="Enter password..."
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            onKeyPress={handlePasswordKeyPress}
+                            autoFocus
+                        />
+                        <div className="button-group">
+                            <div
+                                className="button"
+                                onClick={() => {
+                                    setShowPasswordModal(false);
+                                    setPassword('');
+                                }}
+                                style={{ background: '#E74C3C' }}
+                            >
+                                Cancel
+                            </div>
+                            <div
+                                className="button"
+                                onClick={handlePasswordSubmit}
+                                style={{ background: '#27AE60' }}
+                            >
+                                Submit
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showRefillModal && (
+                <div className="confirm-dialog">
+                    <div className="confirm-dialog__box">
+                        <h3>📦 Refill Stock</h3>
+                        <p>Enter the number of items to add to each product:</p>
+                        <input
+                            type="number"
+                            className="refill-input"
+                            value={refillAmount || ''}
+                            onChange={handleRefillAmountChange}
+                            onKeyPress={handleRefillKeyPress}
+                            min="1"
+                            max="50"
+                            placeholder="Enter amount..."
+                            autoFocus
+                        />
+                        <div className="confirm-dialog__buttons">
+                            <button
+                                className="confirm-button cancel"
+                                onClick={() => {
+                                    setShowRefillModal(false);
+                                    setRefillAmount(5);
+                                }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="confirm-button confirm"
+                                onClick={handleRefillSubmit}
+                            >
+                                Refill Stock
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showResetConfirm && (
+                <div className="confirm-dialog">
+                    <div className="confirm-dialog__box">
+                        <h3>⚠️ Reset Machine</h3>
+                        <p>
+                            Are you sure you want to reset the machine to factory settings?
+                            This will clear all data including:
+                            <br />• Current balance
+                            <br />• Transaction history
+                            <br />• Payment settings
+                            <br />• Temperature settings
+                        </p>
+                        <div className="confirm-dialog__buttons">
+                            <button
+                                className="confirm-button cancel"
+                                onClick={() => setShowResetConfirm(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="confirm-button confirm"
+                                onClick={() => {
+                                    handleReset();
+                                    setShowResetConfirm(false);
+                                }}
+                            >
+                                Reset Machine
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default SupplierPanel;
