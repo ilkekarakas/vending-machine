@@ -1,18 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PaymentState, PaymentMethod } from '../../types/general-types';
-import { saveState } from '../../utils/localStorage';
-import { store } from '../store';
-
-interface PaymentState {
-    insertedMoney: number;
-    selectedPaymentMethod: PaymentMethod | null;
-    isProcessingPayment: boolean;
-    isInsertingMoney: boolean;
-    lastInsertedAmount: number | null;
-    collectedMoney: number;
-    sessionEndTime: number | null;
-    errorMessage: string | null;
-}
 
 const initialState: PaymentState = {
     insertedMoney: 0,

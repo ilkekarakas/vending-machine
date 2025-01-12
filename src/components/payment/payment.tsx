@@ -168,6 +168,16 @@ const Payment: React.FC = () => {
         }, 2000);
     };
 
+    const handleCancel = () => {
+        if (insertedMoney > 0) {
+            dispatch(refundMoney());
+            toast.info(`Refunded ${insertedMoney} units`);
+        }
+        dispatch(selectProduct(null));
+        dispatch(selectPaymentMethod(null));
+        toast.info('Transaction cancelled');
+    };
+
     const handleRefund = () => {
         if (insertedMoney > 0) {
             toast.success(`Refunded ${insertedMoney} units. Please collect your money.`);
@@ -245,6 +255,16 @@ const Payment: React.FC = () => {
                     style={{ background: '#27AE60' }}
                 >
                     ✅ Purchase
+                </button>
+            </div>
+            <div className="button-group" style={{ marginTop: '10px' }}>
+                <button
+                    className="button"
+                    onClick={handleCancel}
+                    disabled={isProcessingPayment}
+                    style={{ background: '#F39C12', width: '100%' }}
+                >
+                    ❌ Cancel
                 </button>
             </div>
         </>

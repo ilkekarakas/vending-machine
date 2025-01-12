@@ -85,10 +85,11 @@ export interface PaymentState {
   insertedMoney: number;
   selectedPaymentMethod: PaymentMethod | null;
   isProcessingPayment: boolean;
-  collectedMoney: number;
-  errorMessage: string | null;
   isInsertingMoney: boolean;
-  lastInsertedAmount: number;
+  lastInsertedAmount: number | null;
+  collectedMoney: number;
+  sessionEndTime: number | null;
+  errorMessage: string | null;
 }
 
 export interface ProductState {
