@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Product, ProductState } from '../../types/general-types';
-import { saveState } from '../../utils/localStorage';
-import { store } from '../store';
 
 const initialState: ProductState = {
   products: [
