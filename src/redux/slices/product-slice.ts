@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Product, ProductState } from '../../types/general-types';
+import { saveState } from '../../utils/localStorage';
+import { store } from '../store';
 
 const initialState: ProductState = {
   products: [
@@ -53,7 +55,6 @@ const productSlice = createSlice({
           product.stock += action.payload.amount;
         });
       } else {
-        // Refill specific product
         const product = state.products.find(p => p.id === action.payload.productId);
         if (product) {
           product.stock += action.payload.amount;

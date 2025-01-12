@@ -4,7 +4,7 @@ import { RootState } from '../../redux/store';
 import { collectMoney, resetPayment } from '../../redux/slices/payment-slice';
 import { toast } from 'react-toastify';
 import { refillStock, resetProducts } from '../../redux/slices/product-slice';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../../assets/styles/common.scss';
 import './supplier-panel.scss';
 
@@ -121,6 +121,23 @@ const SupplierPanel: React.FC = () => {
             }
         }
     };
+
+    useEffect(() => {
+        if (!showPasswordModal) {
+            setAttemptCount(0);
+            setCooldownEndTime(null);
+        }
+    }, [showPasswordModal]);
+
+    useEffect(() => {
+        if (cooldownEndTime) {
+            const timeoutId = setTimeout(() => {
+                setCooldownEndTime(null);
+            }, cooldownEndTime - Date.now());
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [cooldownEndTime]);
 
     const handlePasswordKeyPress = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
