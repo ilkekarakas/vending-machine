@@ -261,7 +261,7 @@ const Payment: React.FC = () => {
                 <button
                     className="button"
                     onClick={handleCancel}
-                    disabled={isProcessingPayment}
+                    disabled={isProcessingPayment || !selectedProduct}
                     style={{ background: '#F39C12', width: '100%' }}
                 >
                     ❌ Cancel
