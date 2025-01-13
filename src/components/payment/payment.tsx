@@ -8,6 +8,7 @@ import { decreaseStock, selectProduct, updateTotalSales } from "../../redux/slic
 import { deactivateRobotArm, toggleComponent } from "../../redux/slices/machine-slice";
 import './payment.scss';
 import '../../assets/styles/common.scss';
+import { MAX_ENERGY_CAPACITY, ROBOT_ARM_ENERGY } from "../../utils/environment-constants";
 
 const Payment: React.FC = () => {
     const dispatch = useDispatch();
@@ -57,7 +58,7 @@ const Payment: React.FC = () => {
             return;
         }
         // If cash was inserted and switching to credit card, refund the money
-        if (method === 'credit_card' && insertedMoney > 0) {
+        if (method === PaymentMethod.CreditCard && insertedMoney > 0) {
             const refundAmount = insertedMoney;
             dispatch(refundMoney()); // This will only refund the money
             toast.info(`Refunded ${refundAmount} units from cash payment`);
@@ -120,7 +121,7 @@ const Payment: React.FC = () => {
         }
 
         // Check energy consumption before activating robot arm
-        if (energyConsumption + 2 > 5) {
+        if (energyConsumption + ROBOT_ARM_ENERGY > MAX_ENERGY_CAPACITY) {
             toast.error('Cannot process purchase: System energy limit reached. Please try again in a moment.');
             return;
         }

@@ -9,7 +9,6 @@ const initialState: PaymentState = {
     lastInsertedAmount: null,
     collectedMoney: 0,
     sessionEndTime: null,
-    errorMessage: null,
 };
 
 const paymentSlice = createSlice({
@@ -18,25 +17,21 @@ const paymentSlice = createSlice({
     reducers: {
         insertMoney: (state, action: PayloadAction<number>) => {
             state.insertedMoney += action.payload;
-            state.errorMessage = null;
         },
         refundMoney: (state) => {
             state.insertedMoney = 0;
-            state.errorMessage = null;
         },
         selectPaymentMethod: (state, action: PayloadAction<PaymentMethod | null>) => {
             state.selectedPaymentMethod = action.payload;
-            state.errorMessage = null;
         },
         setProcessingPayment: (state, action: PayloadAction<boolean>) => {
             state.isProcessingPayment = action.payload;
         },
         collectMoney: (state) => {
-            state.collectedMoney += state.insertedMoney;
+            // Add current collected money to total and reset both values
+            state.collectedMoney = 0;
             state.insertedMoney = 0;
-        },
-        setErrorMessage: (state, action: PayloadAction<string | null>) => {
-            state.errorMessage = action.payload;
+            return state;
         },
         deductPayment: (state, action: PayloadAction<number>) => {
             if (state.selectedPaymentMethod === PaymentMethod.Cash) {
@@ -69,7 +64,6 @@ export const {
     selectPaymentMethod,
     setProcessingPayment,
     collectMoney,
-    setErrorMessage,
     deductPayment,
     setIsInsertingMoney,
     setLastInsertedAmount,

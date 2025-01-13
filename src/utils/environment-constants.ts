@@ -1,0 +1,10 @@
+export const MAX_ENERGY_CAPACITY = 5;
+export const NORMAL_MIN_TEMPERATURE = 8;
+export const NORMAL_MAX_TEMPERATURE = 12;
+export const TEMPERATURE_ENERGY = 2;
+export const LIGHTNING_ENERGY = 2;
+export const ROBOT_ARM_ENERGY = 2;
+export const WRONG_PASSWORD_LIMIT = 3;
+export const SESSION_DURATION = 300;
+export const NIGHT_TIME = 20;
+export const DAY_TIME = 6;

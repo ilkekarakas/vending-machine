@@ -9,10 +9,10 @@ import SupplierPanel from './supplier-panel/supplier-panel';
 import StatusBar from './status-bar/status-bar';
 import EnvironmentStatus from './environment-status/environment-status';
 import './vending-machine.scss';
+import { DAY_TIME, MAX_ENERGY_CAPACITY, NIGHT_TIME } from '../utils/environment-constants';
 
 const VendingMachine: React.FC = () => {
   const dispatch = useDispatch();
-
   const {
     isProcessingPayment,
   } = useSelector((state: RootState) => state.payment);
@@ -35,7 +35,7 @@ const VendingMachine: React.FC = () => {
   useEffect(() => {
     const checkNightTime = () => {
       const currentHour = new Date().getHours();
-      dispatch(setNightTime(currentHour >= 20 || currentHour < 6));
+      dispatch(setNightTime(currentHour >= NIGHT_TIME || currentHour < DAY_TIME));
     };
 
     // İlk kontrol
@@ -60,7 +60,7 @@ const VendingMachine: React.FC = () => {
 
   // Yüksek enerji tüketimi için uyarı ekle
   useEffect(() => {
-    if (energyConsumption > 4) {
+    if (energyConsumption > MAX_ENERGY_CAPACITY) {
       toast.warning('High energy consumption! Some systems may be disabled.');
     }
   }, [energyConsumption]);
@@ -72,12 +72,19 @@ const VendingMachine: React.FC = () => {
         <button
           className="clear-cache-button"
           onClick={() => {
+            // First clear localStorage
             localStorage.clear();
+            
+            // Force Redux state reset by dispatching reset actions
+            dispatch({ type: 'machine/resetMachine' });
+            dispatch({ type: 'product/resetProducts' });
+            dispatch({ type: 'payment/resetPayment' });
+            
             toast.success('Cache cleared! Page will reload...');
             setTimeout(() => window.location.reload(), 1500);
           }}
         >
-          🗑️ Clear Cache
+          🗑️ DEBUG: Clear Cache
         </button>
       </div>
       <VendingMachineBody />

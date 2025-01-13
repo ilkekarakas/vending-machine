@@ -7,6 +7,7 @@ import { refillStock, resetProducts } from '../../redux/slices/product-slice';
 import { useState, useEffect } from 'react';
 import '../../assets/styles/common.scss';
 import './supplier-panel.scss';
+import { WRONG_PASSWORD_LIMIT } from '../../utils/environment-constants';
 
 const SupplierPanel: React.FC = () => {
     const dispatch = useDispatch();
@@ -121,7 +122,7 @@ const SupplierPanel: React.FC = () => {
             setAttemptCount(newAttemptCount);
             localStorage.setItem('passwordAttempts', newAttemptCount.toString());
             
-            if (newAttemptCount >= 3) {
+            if (newAttemptCount >= WRONG_PASSWORD_LIMIT) {
                 const newCooldownTime = Date.now() + 20000;
                 setCooldownEndTime(newCooldownTime);
                 localStorage.setItem('cooldownEndTime', newCooldownTime.toString());
@@ -131,7 +132,7 @@ const SupplierPanel: React.FC = () => {
                 setPassword('');
                 toast.error('Too many failed attempts. Notification sent to supplier. Please wait 20 seconds.');
             } else {
-                toast.error(`Incorrect password. ${3 - newAttemptCount} attempts remaining`);
+                toast.error(`Incorrect password. ${WRONG_PASSWORD_LIMIT - newAttemptCount} attempts remaining`);
             }
         }
     };

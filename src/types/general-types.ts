@@ -12,7 +12,6 @@ interface VendingMachineState {
   insertedMoney: number;
   selectedProduct: Product | null;
   selectedPaymentMethod: PaymentMethod | null;
-  errorMessage: string | null;
   collectedMoney: number;
   totalSales: number;
   isProcessingPayment: boolean;
@@ -23,12 +22,7 @@ interface VendingMachineState {
     lights: boolean;
     robotArm: boolean;
   };
-  componentEnergy: {
-    cooling: number;
-    heating: number;
-    lights: number;
-    robotArm: number;
-  };
+
   machineTemperature: number; // Cihazın iç sıcaklığı
   isNightTime: boolean;
   isSupplierMode: boolean;
@@ -46,7 +40,6 @@ export const initialState: VendingMachineState = {
   insertedMoney: 0,
   selectedProduct: null,
   selectedPaymentMethod: null,
-  errorMessage: null,
   collectedMoney: 0,
   totalSales: 0,
   isProcessingPayment: false,
@@ -56,12 +49,6 @@ export const initialState: VendingMachineState = {
     heating: false,
     lights: false,
     robotArm: false,
-  },
-  componentEnergy: {
-    cooling: 2.0,
-    heating: 2.0,
-    lights: 2.0,
-    robotArm: 2.0,
   },
   machineTemperature: 8, // Başlangıç sıcaklığı (4-14 arası güvenli bölge)
   isNightTime: false,
@@ -89,7 +76,6 @@ export interface PaymentState {
   lastInsertedAmount: number | null;
   collectedMoney: number;
   sessionEndTime: number | null;
-  errorMessage: string | null;
 }
 
 export interface ProductState {

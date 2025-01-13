@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MachineState } from '../../types/general-types';
+import { LIGHTNING_ENERGY, MAX_ENERGY_CAPACITY, NORMAL_MAX_TEMPERATURE, NORMAL_MIN_TEMPERATURE, ROBOT_ARM_ENERGY, TEMPERATURE_ENERGY } from '../../utils/environment-constants';
 
 const initialState: MachineState = {
   energyConsumption: 0,
@@ -14,16 +15,33 @@ const initialState: MachineState = {
   isSupplierMode: false, // Always start with supplier mode off
 };
 
+
 const machineSlice = createSlice({
   name: 'machine',
   initialState,
   reducers: {
     toggleComponent: (state, action: PayloadAction<keyof typeof initialState.components>) => {
       const component = action.payload;
-      const newEnergyConsumption = state.energyConsumption + (state.components[component] ? -2 : 2);
+      
+      // Get the energy consumption based on component type
+      let componentEnergy;
+      switch (component) {
+        case 'cooling':
+        case 'heating':
+          componentEnergy = TEMPERATURE_ENERGY;
+          break;
+        case 'lights':
+          componentEnergy = LIGHTNING_ENERGY;
+          break;
+        case 'robotArm':
+          componentEnergy = ROBOT_ARM_ENERGY;
+          break;
+      }
+      
+      const newEnergyConsumption = state.energyConsumption + (state.components[component] ? -componentEnergy : componentEnergy);
       
       // Check if turning on would exceed energy limit
-      if (!state.components[component] && newEnergyConsumption > 5) {
+      if (!state.components[component] && newEnergyConsumption > MAX_ENERGY_CAPACITY) {
         return; // Don't toggle if it would exceed limit
       }
       
@@ -44,37 +62,37 @@ const machineSlice = createSlice({
       Object.entries(state.components).forEach(([component, isActive]) => {
         if (isActive) {
           activeComponents.push(component);
-          currentEnergy += 2;
+          currentEnergy += TEMPERATURE_ENERGY;
         }
       });
 
       // Temperature control logic
-      if (state.machineTemperature < 8) {
+      if (state.machineTemperature < NORMAL_MIN_TEMPERATURE) {
         // Need heating - temperature below normal range
-        if (currentEnergy + 2 <= 5 && !state.components.heating) {
+        if (currentEnergy + TEMPERATURE_ENERGY <= MAX_ENERGY_CAPACITY && !state.components.heating) {
           state.components.heating = true;
           state.components.cooling = false;
-          currentEnergy += 2;
+          currentEnergy += TEMPERATURE_ENERGY;
         }
         if (state.components.heating) {
           tempChange = Math.random(); // Random value between 0 and 1
         }
-      } else if (state.machineTemperature > 12) {
+      } else if (state.machineTemperature > NORMAL_MAX_TEMPERATURE) {
         // Need cooling - temperature above normal range
-        if (currentEnergy + 2 <= 5 && !state.components.cooling) {
+        if (currentEnergy + TEMPERATURE_ENERGY <= MAX_ENERGY_CAPACITY && !state.components.cooling) {
           state.components.cooling = true;
           state.components.heating = false;
-          currentEnergy += 2;
+          currentEnergy += TEMPERATURE_ENERGY;
         }
         if (state.components.cooling) {
           tempChange = -Math.random(); // Random value between -1 and 0
         }
-      } else if (state.machineTemperature >= 8 && state.machineTemperature <= 12) {
+      } else if (state.machineTemperature >= NORMAL_MIN_TEMPERATURE && state.machineTemperature <= NORMAL_MAX_TEMPERATURE) {
         // Within normal range - turn off temperature control if active
         if (state.components.cooling || state.components.heating) {
           state.components.cooling = false;
           state.components.heating = false;
-          currentEnergy -= 2;
+          currentEnergy -= TEMPERATURE_ENERGY;
         }
       }
 
@@ -87,16 +105,11 @@ const machineSlice = createSlice({
     deactivateRobotArm: (state) => {
       if (state.components.robotArm) {
         state.components.robotArm = false;
-        state.energyConsumption -= 2;
+        state.energyConsumption -= ROBOT_ARM_ENERGY;
       }
     },
     toggleSupplierMode: (state) => {
       state.isSupplierMode = !state.isSupplierMode;
-      if (!state.isSupplierMode) {
-        // Reset machine state when exiting supplier mode
-        state.components = initialState.components;
-        state.energyConsumption = initialState.energyConsumption;
-      }
     },
     setNightTime: (state, action: PayloadAction<boolean>) => {
       state.isNightTime = action.payload;
@@ -104,7 +117,7 @@ const machineSlice = createSlice({
         state.components.lights = true;
         // Add energy consumption if lights weren't already on
         if (!state.components.lights) {
-          state.energyConsumption += 2;
+          state.energyConsumption += LIGHTNING_ENERGY;
         }
       }
     },
@@ -126,7 +139,7 @@ const machineSlice = createSlice({
       state.isNightTime = wasNightTime;
       if (wasNightTime) {
         state.components.lights = true;
-        state.energyConsumption = 2;
+        state.energyConsumption = LIGHTNING_ENERGY;
       }
     }
   },

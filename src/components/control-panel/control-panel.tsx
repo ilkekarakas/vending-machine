@@ -7,8 +7,8 @@ import { selectProduct } from '../../redux/slices/product-slice';
 import { selectPaymentMethod, refundMoney, setSessionEndTime } from '../../redux/slices/payment-slice';
 import { toast } from 'react-toastify';
 import './control-panel.scss';
+import { SESSION_DURATION } from '../../utils/environment-constants';
 
-const SESSION_DURATION = 300; // 5 minutes in seconds
 
 const ControlPanel: React.FC = () => {
   const dispatch = useDispatch();
