@@ -25,7 +25,6 @@ const EnvironmentStatus: React.FC = () => {
       <span className={`status-item ${components.lights ? 'lights-on' : ''}`}>
         💡 {components.lights ? 'Lights On' : 'Lights Off'}
       </span>
-      {components.robotArm && <span className="status-item">🦾 Dispensing</span>}
     </div>
 
   );

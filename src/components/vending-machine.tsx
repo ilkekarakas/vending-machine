@@ -1,41 +1,50 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { RootState } from '../redux/store';
-import { updateEnvironment, deactivateRobotArm, setNightTime } from '../redux/slices/machine-slice';
-import VendingMachineBody from './vending-machine-body/vending-machine-body';
-import SupplierPanel from './supplier-panel/supplier-panel';
-import StatusBar from './status-bar/status-bar';
-import EnvironmentStatus from './environment-status/environment-status';
-import './vending-machine.scss';
-import { DAY_TIME, MAX_ENERGY_CAPACITY, NIGHT_TIME } from '../utils/environment-constants';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { RootState } from "../redux/store";
+import {
+  updateEnvironment,
+  deactivateRobotArm,
+  setNightTime,
+} from "../redux/slices/machine-slice";
+import VendingMachineBody from "./vending-machine-body/vending-machine-body";
+import SupplierPanel from "./supplier-panel/supplier-panel";
+import StatusBar from "./status-bar/status-bar";
+import EnvironmentStatus from "./environment-status/environment-status";
+import "./vending-machine.scss";
+import {
+  DAY_TIME,
+  MAX_ENERGY_CAPACITY,
+  NIGHT_TIME,
+} from "../utils/environment-constants";
 
 const VendingMachine: React.FC = () => {
   const dispatch = useDispatch();
-  const {
-    isProcessingPayment,
-  } = useSelector((state: RootState) => state.payment);
+  const { isProcessingPayment } = useSelector(
+    (state: RootState) => state.payment
+  );
 
-  const {
-    energyConsumption,
-    components,
-  } = useSelector((state: RootState) => state.machine);
+  const { energyConsumption, components } = useSelector(
+    (state: RootState) => state.machine
+  );
 
   // Çevre güncelleme aralığı (sürekli çalışır)
   useEffect(() => {
     const interval = setInterval(() => {
       dispatch(updateEnvironment());
-    }, 3000);
+    }, 6000);
 
     return () => clearInterval(interval);
-  }, [dispatch]);
+  }, []);
 
   // Gece modu kontrolü
   useEffect(() => {
     const checkNightTime = () => {
       const currentHour = new Date().getHours();
-      dispatch(setNightTime(currentHour >= NIGHT_TIME || currentHour < DAY_TIME));
+      dispatch(
+        setNightTime(currentHour >= NIGHT_TIME || currentHour < DAY_TIME)
+      );
     };
 
     // İlk kontrol
@@ -45,9 +54,9 @@ const VendingMachine: React.FC = () => {
     const interval = setInterval(checkNightTime, 60000);
 
     return () => clearInterval(interval);
-  }, [dispatch]);
+  }, []);
 
-  // Robot kolunu devre dışı bırak
+  //ürün verme süresi bittiğinde Robot kolunu devre dışı bırak 
   useEffect(() => {
     if (components.robotArm) {
       const timer = setTimeout(() => {
@@ -56,12 +65,12 @@ const VendingMachine: React.FC = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [components.robotArm, dispatch]);
+  }, [components.robotArm]);
 
   // Yüksek enerji tüketimi için uyarı ekle
   useEffect(() => {
     if (energyConsumption > MAX_ENERGY_CAPACITY) {
-      toast.warning('High energy consumption! Some systems may be disabled.');
+      toast.warning("High energy consumption! Some systems may be disabled.");
     }
   }, [energyConsumption]);
 
@@ -74,13 +83,13 @@ const VendingMachine: React.FC = () => {
           onClick={() => {
             // First clear localStorage
             localStorage.clear();
-            
+
             // Force Redux state reset by dispatching reset actions
-            dispatch({ type: 'machine/resetMachine' });
-            dispatch({ type: 'product/resetProducts' });
-            dispatch({ type: 'payment/resetPayment' });
-            
-            toast.success('Cache cleared! Page will reload...');
+            dispatch({ type: "machine/resetMachine" });
+            dispatch({ type: "product/resetProducts" });
+            dispatch({ type: "payment/resetPayment" });
+
+            toast.success("Cache cleared! Page will reload...");
             setTimeout(() => window.location.reload(), 1500);
           }}
         >
@@ -100,9 +109,7 @@ const VendingMachine: React.FC = () => {
       )}
 
       {isProcessingPayment && (
-        <div className="processing-overlay">
-          Processing Payment
-        </div>
+        <div className="processing-overlay">Processing Payment</div>
       )}
 
       <ToastContainer

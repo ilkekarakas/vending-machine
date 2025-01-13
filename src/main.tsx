@@ -5,8 +5,6 @@ import { store } from './redux/store'
 import VendingMachine from './components/vending-machine'
 import './assets/styles/index.scss';
 
-
-
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>

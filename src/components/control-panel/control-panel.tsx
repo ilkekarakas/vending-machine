@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import './control-panel.scss';
 import { SESSION_DURATION } from '../../utils/environment-constants';
 
-
 const ControlPanel: React.FC = () => {
   const dispatch = useDispatch();
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
@@ -85,7 +84,7 @@ const ControlPanel: React.FC = () => {
         </div>
       )}
       <DisplayPanel />
-      <Payment />
+      <Payment   setTimeLeft={setTimeLeft}  />
     </div>
   );
 };
