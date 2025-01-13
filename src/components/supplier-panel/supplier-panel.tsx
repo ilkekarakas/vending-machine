@@ -100,6 +100,12 @@ const SupplierPanel: React.FC = () => {
         }
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (['+', '-', 'e', 'E'].includes(e.key)) {
+            e.preventDefault();
+        }
+    };
+
     const handleReset = () => {
         dispatch(resetProducts());
         dispatch(resetPayment());
@@ -285,6 +291,7 @@ const SupplierPanel: React.FC = () => {
                             className="refill-input"
                             value={refillAmount || ''}
                             onChange={handleRefillAmountChange}
+                            onKeyDown={handleKeyDown}
                             onKeyPress={handleRefillKeyPress}
                             min="1"
                             max="50"
