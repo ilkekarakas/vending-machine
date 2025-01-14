@@ -5,6 +5,9 @@
 
 React, TypeScript ve Redux ile geliştirilmiş modern ve etkileşimli bir otomat uygulaması. Bu proje, sıcaklık kontrolü, enerji yönetimi ve tedarikçi modu gibi gelişmiş özelliklere sahip gerçek bir otomatı simüle eder.
 
+Deploy edilmiş haline aşağıdaki bağlantıdan ulaşabilirsiniz.
+- [Vending Machine](https://ilkekarakas.github.io/vending-machine)
+
 ## 📑 İçindekiler
 - [Özellikler](#-özellikler)
 - [Teknolojiler](#️-kullanılan-teknolojiler)
@@ -12,6 +15,7 @@ React, TypeScript ve Redux ile geliştirilmiş modern ve etkileşimli bir otomat
 - [Kullanım Kılavuzu](#-kullanım-kılavuzu)
 - [Test Dokümantasyonu](#-test-dokümantasyonu)
 - [Proje Yapısı](#-proje-yapısı)
+- [Ortam Sabitleri](#️-ortam-sabitleri)
 
 ## ✨ Özellikler
 
@@ -199,3 +203,33 @@ src/
 ├── utils/             # Yardımcı fonksiyonlar
 ├── assets/            # Statik dosyalar
 └── __tests__/         # Test dosyaları
+```
+
+
+
+## ⚙️ Ortam Sabitleri
+
+Uygulama içinde kullanılan sabit değerler:  ([`utils/environment-constants.ts`](src/utils/environment-constants.ts)):
+
+```typescript
+// Enerji Yönetimi
+MAX_ENERGY_CAPACITY = 5      // Maksimum enerji kapasitesi (birim/saat)
+TEMPERATURE_ENERGY = 2       // Sıcaklık kontrolü enerji tüketimi
+LIGHTNING_ENERGY = 2         // Aydınlatma sistemi enerji tüketimi
+ROBOT_ARM_ENERGY = 2         // Robot kol enerji tüketimi
+
+// Sıcaklık Kontrolü
+NORMAL_MIN_TEMPERATURE = 8   // Minimum normal sıcaklık (°C)
+AVERAGE_TEMPERATURE = 10     // Ortalama sıcaklık (°C)
+NORMAL_MAX_TEMPERATURE = 12  // Maksimum normal sıcaklık (°C)
+
+// Zaman Ayarları
+SESSION_DURATION = 300       // Oturum süresi (saniye)
+NIGHT_TIME = 20             // Gece modu başlangıç saati
+DAY_TIME = 6               // Gündüz modu başlangıç saati
+
+// Güvenlik
+WRONG_PASSWORD_LIMIT = 3     // Maksimum yanlış şifre denemesi
+
+// Ödeme
+INSERT_AMOUNTS = [1, 5, 10, 20] // Para ekleme miktarları
