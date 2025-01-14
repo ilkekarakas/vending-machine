@@ -1,5 +1,6 @@
 export const MAX_ENERGY_CAPACITY = 5;
 export const NORMAL_MIN_TEMPERATURE = 8;
+export const AVERAGE_TEMPERATURE = 10;
 export const NORMAL_MAX_TEMPERATURE = 12;
 export const TEMPERATURE_ENERGY = 2;
 export const LIGHTNING_ENERGY = 2;

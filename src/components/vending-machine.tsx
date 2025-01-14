@@ -7,6 +7,7 @@ import {
   updateEnvironment,
   deactivateRobotArm,
   setNightTime,
+  resetMachine,
 } from "../redux/slices/machine-slice";
 import VendingMachineBody from "./vending-machine-body/vending-machine-body";
 import SupplierPanel from "./supplier-panel/supplier-panel";
@@ -18,6 +19,8 @@ import {
   MAX_ENERGY_CAPACITY,
   NIGHT_TIME,
 } from "../utils/environment-constants";
+import { resetProducts } from "../redux/slices/product-slice";
+import { resetPayment } from "../redux/slices/payment-slice";
 
 const VendingMachine: React.FC = () => {
   const dispatch = useDispatch();
@@ -85,9 +88,9 @@ const VendingMachine: React.FC = () => {
             localStorage.clear();
 
             // Force Redux state reset by dispatching reset actions
-            dispatch({ type: "machine/resetMachine" });
-            dispatch({ type: "product/resetProducts" });
-            dispatch({ type: "payment/resetPayment" });
+            dispatch(resetMachine());
+            dispatch(resetProducts());
+            dispatch(resetPayment());
 
             toast.success("Cache cleared! Page will reload...");
             setTimeout(() => window.location.reload(), 1500);

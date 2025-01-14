@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MachineState } from '../../types/general-types';
-import { LIGHTNING_ENERGY, MAX_ENERGY_CAPACITY, NORMAL_MAX_TEMPERATURE, NORMAL_MIN_TEMPERATURE, ROBOT_ARM_ENERGY, TEMPERATURE_ENERGY } from '../../utils/environment-constants';
+import { AVERAGE_TEMPERATURE, LIGHTNING_ENERGY, MAX_ENERGY_CAPACITY, NORMAL_MAX_TEMPERATURE, NORMAL_MIN_TEMPERATURE, ROBOT_ARM_ENERGY, TEMPERATURE_ENERGY } from '../../utils/environment-constants';
 
 const initialState: MachineState = {
   energyConsumption: 0,
@@ -10,7 +10,7 @@ const initialState: MachineState = {
     lights: false,
     robotArm: false,
   },
-  machineTemperature: 10, // Starting at middle of normal range (8-12)
+  machineTemperature: AVERAGE_TEMPERATURE, // Starting at middle of normal range (8-12)
   isNightTime: false,
   isSupplierMode: false, // Always start with supplier mode off
 };
@@ -75,7 +75,7 @@ const machineSlice = createSlice({
           currentEnergy += TEMPERATURE_ENERGY;
         }
         if (state.components.heating) {
-          tempChange = Math.random(); // Random value between 0 and 1
+          tempChange = Math.random();   
         }
       } else if (state.machineTemperature > NORMAL_MAX_TEMPERATURE) {
         // Need cooling - temperature above normal range
@@ -94,8 +94,8 @@ const machineSlice = createSlice({
           state.components.heating = false;
           currentEnergy -= TEMPERATURE_ENERGY;
         }
+        
       }
-
       // Apply temperature change with limits
       state.machineTemperature = Math.max(4, Math.min(14, state.machineTemperature + tempChange));
 
