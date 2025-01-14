@@ -8,6 +8,7 @@ import {
   deactivateRobotArm,
   setNightTime,
   resetMachine,
+  toggleComponent,
 } from "../redux/slices/machine-slice";
 import VendingMachineBody from "./vending-machine-body/vending-machine-body";
 import SupplierPanel from "./supplier-panel/supplier-panel";
@@ -18,6 +19,8 @@ import {
   DAY_TIME,
   MAX_ENERGY_CAPACITY,
   NIGHT_TIME,
+  NORMAL_MAX_TEMPERATURE,
+  NORMAL_MIN_TEMPERATURE,
 } from "../utils/environment-constants";
 import { resetProducts } from "../redux/slices/product-slice";
 import { resetPayment } from "../redux/slices/payment-slice";
@@ -28,7 +31,7 @@ const VendingMachine: React.FC = () => {
     (state: RootState) => state.payment
   );
 
-  const { energyConsumption, components } = useSelector(
+  const { energyConsumption, components, machineTemperature } = useSelector(
     (state: RootState) => state.machine
   );
 
@@ -40,6 +43,27 @@ const VendingMachine: React.FC = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Sıcaklık kontrolü - daha sık kontrol
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Soğutma kontrolü
+      if (machineTemperature > NORMAL_MAX_TEMPERATURE && !components.cooling) {
+        dispatch(toggleComponent('cooling'));
+      } else if (machineTemperature <= NORMAL_MAX_TEMPERATURE && components.cooling) {
+        dispatch(toggleComponent('cooling'));
+      }
+
+      // Isıtma kontrolü
+      if (machineTemperature < NORMAL_MIN_TEMPERATURE && !components.heating) {
+        dispatch(toggleComponent('heating'));
+      } else if (machineTemperature >= NORMAL_MIN_TEMPERATURE && components.heating) {
+        dispatch(toggleComponent('heating'));
+      }
+    }, 1000); // Her saniye kontrol et
+
+    return () => clearInterval(interval);
+  }, [machineTemperature, components]);
 
   // Gece modu kontrolü
   useEffect(() => {

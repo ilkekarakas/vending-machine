@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MachineState } from '../../types/general-types';
-import { AVERAGE_TEMPERATURE, LIGHTNING_ENERGY, MAX_ENERGY_CAPACITY, NORMAL_MAX_TEMPERATURE, NORMAL_MIN_TEMPERATURE, ROBOT_ARM_ENERGY, TEMPERATURE_ENERGY } from '../../utils/environment-constants';
+import { AVERAGE_TEMPERATURE, LIGHTNING_ENERGY, MAX_ENERGY_CAPACITY, ROBOT_ARM_ENERGY, TEMPERATURE_ENERGY } from '../../utils/environment-constants';
 
 const initialState: MachineState = {
   energyConsumption: 0,
@@ -48,57 +48,29 @@ const machineSlice = createSlice({
       state.energyConsumption = newEnergyConsumption;
     },
     updateEnvironment: (state) => {
-      let currentEnergy = 0;
-      const activeComponents: string[] = [];
-
       // Random temperature decr - increased from 0.2 to 0.6
       let tempChange = (Math.random() - 0.5) * 0.8;
       
       // Add temperature change based on time of day
       tempChange += state.isNightTime ? -0.3 : 0.3; // Temperature decreases at night, increases during day
 
-      // Calculate current energy usage from active components
-      Object.entries(state.components).forEach(([component, isActive]) => {
-        if (isActive) {
-          activeComponents.push(component);
-          currentEnergy += TEMPERATURE_ENERGY;
-        }
-      });
-
-      // Temperature control logic
-      if (state.machineTemperature < NORMAL_MIN_TEMPERATURE) {
-        // Need heating - temperature below normal range
-        if (currentEnergy + TEMPERATURE_ENERGY <= MAX_ENERGY_CAPACITY && !state.components.heating) {
-          state.components.heating = true;
-          state.components.cooling = false;
-          currentEnergy += TEMPERATURE_ENERGY;
-        }
-        if (state.components.heating) {
-          tempChange = Math.random();   
-        }
-      } else if (state.machineTemperature > NORMAL_MAX_TEMPERATURE) {
-        // Need cooling - temperature above normal range
-        if (currentEnergy + TEMPERATURE_ENERGY <= MAX_ENERGY_CAPACITY && !state.components.cooling) {
-          state.components.cooling = true;
-          state.components.heating = false;
-          currentEnergy += TEMPERATURE_ENERGY;
-        }
-        if (state.components.cooling) {
-          tempChange = -Math.random(); // Random value between -1 and 0
-        }
-      } else if (state.machineTemperature >= NORMAL_MIN_TEMPERATURE && state.machineTemperature <= NORMAL_MAX_TEMPERATURE) {
-        // Within normal range - turn off temperature control if active
-        if (state.components.cooling || state.components.heating) {
-          state.components.cooling = false;
-          state.components.heating = false;
-          currentEnergy -= TEMPERATURE_ENERGY;
-        }
-        
+      // Sistemlerin sıcaklık etkisi
+      if (state.components.cooling) {
+        tempChange = -Math.random(); // Soğutma etkisi
       }
+      if (state.components.heating) {
+        tempChange = Math.random(); // Isıtma etkisi
+      }
+
       // Apply temperature change with limits
       state.machineTemperature = Math.max(4, Math.min(14, state.machineTemperature + tempChange));
 
-      // Update energy consumption
+      // Enerji tüketimini hesapla
+      let currentEnergy = 0;
+      if (state.components.cooling || state.components.heating) currentEnergy += TEMPERATURE_ENERGY;
+      if (state.components.lights) currentEnergy += LIGHTNING_ENERGY;
+      if (state.components.robotArm) currentEnergy += ROBOT_ARM_ENERGY;
+      
       state.energyConsumption = currentEnergy;
     },
     deactivateRobotArm: (state) => {
