@@ -15,7 +15,6 @@ const initialState: MachineState = {
   isSupplierMode: false, // Always start with supplier mode off
 };
 
-
 const machineSlice = createSlice({
   name: 'machine',
   initialState,
@@ -118,6 +117,11 @@ const machineSlice = createSlice({
         // Add energy consumption if lights weren't already on
         if (!state.components.lights) {
           state.energyConsumption += LIGHTNING_ENERGY;
+        }
+      } else {
+        if (state.components.lights) {
+          state.components.lights = false;
+          state.energyConsumption -= LIGHTNING_ENERGY;
         }
       }
     },
