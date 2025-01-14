@@ -71,6 +71,8 @@ Uygulama `http://localhost:5173` adresinde çalışacaktır.
 
 ### 👤 Müşteri Modu
 
+Müşteri modu, kullanıcıların ürünleri görüntüleyip satın alabileceği ana arayüzdür. Bu modda kullanıcılar, ürünleri inceleyebilir, nakit veya kredi kartı ile ödeme yapabilir ve işlemlerini güvenli bir şekilde gerçekleştirebilir. Ayrıca, seçilen ürünün stok durumu ve fiyat bilgisi anlık olarak görüntülenir.
+
 #### Ürün Seçimi
 1. Ana ekranda mevcut ürünleri görüntüleyin
 
@@ -104,6 +106,8 @@ Uygulama `http://localhost:5173` adresinde çalışacaktır.
    - İşlem otomatik olarak tamamlanacaktır
 
 ### 🔐 Tedarikçi Modu
+
+Tedarikçi modu, otomat yöneticilerinin makineyi kontrol ve yönetmesini sağlayan özel bir arayüzdür. Bu mod şifre korumalıdır ve yalnızca yetkili personel tarafından erişilebilir. Tedarikçiler bu modda para toplama, stok yenileme, satış istatistiklerini görüntüleme ve makine ayarlarını yönetme gibi önemli işlemleri gerçekleştirebilir.
 
 1. Giriş:
    - Ana ekranda "Enter Supplier Mode" butonuna tıklayın
