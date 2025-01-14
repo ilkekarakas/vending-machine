@@ -258,41 +258,41 @@ const SupplierPanel: React.FC = () => {
         </div>
       )}
 
-      {showPasswordModal && (
-        <div className="password-modal">
-          <div className="modal-content">
-            <h3 className="modal-title">🔒 Enter Supplier Password</h3>
-            <input
-              className="password-input"
-              type="password"
-              placeholder="Enter password..."
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyPress={handlePasswordKeyPress}
-              autoFocus
-            />
-            <div className="button-group">
-              <div
-                className="button"
-                onClick={() => {
-                  setShowPasswordModal(false);
-                  setPassword("");
-                }}
-                style={{ background: "#E74C3C" }}
-              >
-                Cancel
-              </div>
-              <div
-                className="button"
-                onClick={handlePasswordSubmit}
-                style={{ background: "#27AE60" }}
-              >
-                Submit
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+            {showPasswordModal && (
+                <div className="password-modal">
+                    <div className="modal-content">
+                        <h3 className="modal-title">🔒 Enter Supplier Password</h3>
+                        <input
+                            className="password-input"
+                            type="password"
+                            placeholder="Enter password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            onKeyPress={handlePasswordKeyPress}
+                            autoFocus
+                        />
+                        <div className="button-group">
+                            <div
+                                className="button"
+                                onClick={() => {
+                                    setShowPasswordModal(false);
+                                    setPassword('');
+                                }}
+                                style={{ background: '#E74C3C' }}
+                            >
+                                Cancel
+                            </div>
+                            <div
+                                className="button"
+                                onClick={handlePasswordSubmit}
+                                style={{ background: '#27AE60' }}
+                            >
+                                Submit
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
       {showRefillModal && (
         <div className="confirm-dialog">

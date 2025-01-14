@@ -2,16 +2,16 @@ export interface Product {
   id: number;
   name: string;
   price: number;
-  image: string;
   stock: number;
+  image: string;
   salesCount: number;
 }
 
-interface VendingMachineState {
+export interface VendingMachineState {
   products: Product[];
   insertedMoney: number;
   selectedProduct: Product | null;
-  selectedPaymentMethod: PaymentMethod | null;
+  selectedPaymentMethod: string | null;
   collectedMoney: number;
   totalSales: number;
   isProcessingPayment: boolean;
@@ -22,7 +22,6 @@ interface VendingMachineState {
     lights: boolean;
     robotArm: boolean;
   };
-
   machineTemperature: number; // Cihazın iç sıcaklığı
   isNightTime: boolean;
   isSupplierMode: boolean;
@@ -70,7 +69,7 @@ export interface MachineState {
 
 export interface PaymentState {
   insertedMoney: number;
-  selectedPaymentMethod: PaymentMethod | null;
+  selectedPaymentMethod: string | null;
   isProcessingPayment: boolean;
   isInsertingMoney: boolean;
   lastInsertedAmount: number | null;

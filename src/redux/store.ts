@@ -6,7 +6,7 @@ import { loadState, saveState } from '../utils/localStorage';
 
 const persistedState = loadState();
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   machine: machineReducer,
   product: productReducer,
   payment: paymentReducer,
