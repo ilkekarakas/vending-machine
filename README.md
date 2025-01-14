@@ -1,19 +1,19 @@
-# 🤖 Smart Vending Machine
+# 🤖 Akıllı Otomat
 
-A modern, interactive vending machine application built with React, TypeScript, and Redux. This project simulates a real-world vending machine with advanced features like temperature control, energy management, and a supplier mode.
+React, TypeScript ve Redux ile geliştirilmiş modern ve etkileşimli bir otomat uygulaması. Bu proje, sıcaklık kontrolü, enerji yönetimi ve tedarikçi modu gibi gelişmiş özelliklere sahip gerçek bir otomatı simüle eder.
 
-## ✨ Features
+## ✨ Özellikler
 
-- 🎯 Product Selection & Display
-- 💳 Multiple Payment Methods (Cash/Credit Card)
-- 🔒 Secure Supplier Mode
-- 🌡️ Temperature Control System
-- ⚡ Energy Management
-- 🤖 Automated Robot Arm
-- 📊 Sales Tracking
-- 🌙 Night Mode Support
+- 🎯 Ürün Seçimi ve Gösterimi
+- 💳 Çoklu Ödeme Yöntemleri (Nakit/Kredi Kartı)
+- 🔒 Güvenli Tedarikçi Modu
+- 🌡️ Sıcaklık Kontrol Sistemi
+- ⚡ Enerji Yönetimi
+- 🤖 Otomatik Robot Kol
+- 📊 Satış Takibi
+- 🌙 Gece Modu Desteği
 
-## 🛠️ Technologies Used
+## 🛠️ Kullanılan Teknolojiler
 
 - React 18
 - TypeScript
@@ -25,85 +25,70 @@ A modern, interactive vending machine application built with React, TypeScript, 
 - Styled Components
 - React Toastify
 
-## 🚀 Getting Started
+## 🚀 Başlangıç
 
-### Prerequisites
+### Gereksinimler
 
-- Node.js (Latest LTS version recommended)
-- npm or yarn
+- Node.js (En son LTS sürümü önerilir)
+- npm veya yarn
 
-### Installation
+### Kurulum
 
-1. Clone the repository:
+1. Projeyi klonlayın:
 ```bash
 git clone https://github.com/ilkekarakas/vending-machine.git
 cd vending-machine
 ```
 
-2. Install dependencies:
+2. Bağımlılıkları yükleyin:
 ```bash
 npm install
 ```
 
-3. Start the development server:
+3. Geliştirme sunucusunu başlatın:
 ```bash
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173`
+Uygulama `http://localhost:5173` adresinde çalışacaktır.
 
-## 🧪 Testing
+## 🧪 Testler
 
-Run tests:
+Testleri çalıştırın:
 ```bash
 npm test
 ```
 
-Watch mode:
+İzleme modu:
 ```bash
 npm run test:watch
 ```
 
-Coverage report:
+Kapsam raporu:
 ```bash
 npm run test:coverage
 ```
 
-## 🏗️ Build
+## 🏗️ Derleme
 
-Create a production build:
+Üretim derlemesi oluşturun:
 ```bash
 npm run build
 ```
 
-Preview the build:
+Derlemeyi önizleyin:
 ```bash
 npm run preview
 ```
 
-## 🎮 Usage
-
-### Customer Mode
-- Browse available products
-- Select products
-- Choose payment method (Cash/Credit Card)
-- Complete purchase
-
-### Supplier Mode
-- Access with password: "aselsan"
-- Collect money
-- Refill products
-- View sales statistics
-- Manage machine settings
-
-## 🧩 Project Structure
+## 🧩 Proje Yapısı
 
 ```
 src/
-├── components/         # React components
-├── redux/             # Redux store and slices
-├── types/             # TypeScript type definitions
-├── utils/             # Utility functions
-├── assets/            # Static assets
-└── __tests__/         # Test files
+├── components/         # React bileşenleri
+├── redux/             # Redux store ve slice'lar
+├── types/             # TypeScript tip tanımlamaları
+├── utils/             # Yardımcı fonksiyonlar
+├── assets/            # Statik dosyalar
+└── __tests__/         # Test dosyaları
 ```
