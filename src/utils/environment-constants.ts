@@ -10,3 +10,5 @@ export const SESSION_DURATION = 300;
 export const NIGHT_TIME = 20;
 export const DAY_TIME = 6;
 export const INSERT_AMOUNTS = [1, 5, 10, 20];
+export const SUPPLIER_PASSWORD = "aselsan";
+export const COOLDOWN_TIME = 20;

@@ -24,8 +24,9 @@ import {
 } from "../utils/environment-constants";
 import { resetProducts } from "../redux/slices/product-slice";
 import { resetPayment } from "../redux/slices/payment-slice";
+import React from "react";
 
-const VendingMachine: React.FC = () => {
+const VendingMachine: React.FC = React.memo(() => {
   const dispatch = useDispatch();
   const { isProcessingPayment } = useSelector(
     (state: RootState) => state.payment
@@ -35,7 +36,7 @@ const VendingMachine: React.FC = () => {
     (state: RootState) => state.machine
   );
 
-  // Çevre güncelleme aralığı (sürekli çalışır)
+  // Environment update interval (runs continuously)
   useEffect(() => {
     const interval = setInterval(() => {
       dispatch(updateEnvironment());
@@ -44,28 +45,34 @@ const VendingMachine: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Sıcaklık kontrolü - daha sık kontrol
+  // Temperature control - checked more frequently for ux
   useEffect(() => {
     const interval = setInterval(() => {
-      // Soğutma kontrolü
+    // Cooling system control
       if (machineTemperature > NORMAL_MAX_TEMPERATURE && !components.cooling) {
-        dispatch(toggleComponent('cooling'));
-      } else if (machineTemperature <= NORMAL_MAX_TEMPERATURE && components.cooling) {
-        dispatch(toggleComponent('cooling'));
+        dispatch(toggleComponent("cooling"));
+      } else if (
+        machineTemperature <= NORMAL_MAX_TEMPERATURE &&
+        components.cooling
+      ) {
+        dispatch(toggleComponent("cooling"));
       }
 
-      // Isıtma kontrolü
+      // Heating system control
       if (machineTemperature < NORMAL_MIN_TEMPERATURE && !components.heating) {
-        dispatch(toggleComponent('heating'));
-      } else if (machineTemperature >= NORMAL_MIN_TEMPERATURE && components.heating) {
-        dispatch(toggleComponent('heating'));
+        dispatch(toggleComponent("heating"));
+      } else if (
+        machineTemperature >= NORMAL_MIN_TEMPERATURE &&
+        components.heating
+      ) {
+        dispatch(toggleComponent("heating"));
       }
-    }, 1000); // Her saniye kontrol et
+    }, 1000); // Check every second
 
     return () => clearInterval(interval);
   }, [machineTemperature, components]);
 
-  // Gece modu kontrolü
+  // Night mode control
   useEffect(() => {
     const checkNightTime = () => {
       const currentHour = new Date().getHours();
@@ -74,27 +81,27 @@ const VendingMachine: React.FC = () => {
       );
     };
 
-    // İlk kontrol
+    // Initial check
     checkNightTime();
 
-    // Her dakika kontrol et
+    // Check every minute
     const interval = setInterval(checkNightTime, 60000);
 
     return () => clearInterval(interval);
   }, []);
 
-  //ürün verme süresi bittiğinde Robot kolunu devre dışı bırak 
+    // Deactivate robot arm after dispensing timeout
   useEffect(() => {
     if (components.robotArm) {
       const timer = setTimeout(() => {
         dispatch(deactivateRobotArm());
-      }, 5000); // 5 saniye
+      }, 5000); // 5 seconds
 
       return () => clearTimeout(timer);
     }
   }, [components.robotArm]);
 
-  // Yüksek enerji tüketimi için uyarı ekle
+ // Display a warning for high energy consumption
   useEffect(() => {
     if (energyConsumption > MAX_ENERGY_CAPACITY) {
       toast.warning("High energy consumption! Some systems may be disabled.");
@@ -146,6 +153,6 @@ const VendingMachine: React.FC = () => {
       />
     </div>
   );
-};
+});
 
 export default VendingMachine;

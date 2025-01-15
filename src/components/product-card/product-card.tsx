@@ -4,8 +4,12 @@ import { selectProduct } from "../../redux/slices/product-slice";
 import { RootState } from "../../redux/store";
 import { toast } from "react-toastify";
 import "./product-card.scss";
+import React from "react";
 
-const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
+interface ProductCardProps {
+  product: Product;
+}
+const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) => {
   const dispatch = useDispatch();
   const { isProcessingPayment } = useSelector(
     (state: RootState) => state.payment
@@ -15,6 +19,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const isSelected = selectedProduct?.id === product.id;
   const isOutOfStock = product.stock <= 0;
 
+  //Handles the product selection if supplier mode is on shows warning message to user
   const handleProductSelect = () => {
     if (isSupplierMode) {
       toast.warning("Product selection is disabled in maintenance mode");
@@ -44,6 +49,6 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
       </div>
     </div>
   );
-};
+});
 
 export default ProductCard;

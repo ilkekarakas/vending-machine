@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import './control-panel.scss';
 import { SESSION_DURATION } from '../../utils/environment-constants';
 
-const ControlPanel: React.FC = () => {
+const ControlPanel: React.FC = React.memo(() => {
   const dispatch = useDispatch();
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const { insertedMoney, selectedPaymentMethod, isProcessingPayment, sessionEndTime } = useSelector((state: RootState) => state.payment);
@@ -87,6 +87,6 @@ const ControlPanel: React.FC = () => {
       <Payment   setTimeLeft={setTimeLeft}  />
     </div>
   );
-};
+});
 
 export default ControlPanel;

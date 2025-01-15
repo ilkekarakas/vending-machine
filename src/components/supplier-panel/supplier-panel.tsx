@@ -11,19 +11,26 @@ import { refillStock, resetProducts } from "../../redux/slices/product-slice";
 import { useState, useEffect } from "react";
 import "../../assets/styles/common.scss";
 import "./supplier-panel.scss";
-import { WRONG_PASSWORD_LIMIT } from "../../utils/environment-constants";
+import {
+  COOLDOWN_TIME,
+  SUPPLIER_PASSWORD,
+  WRONG_PASSWORD_LIMIT,
+} from "../../utils/environment-constants";
+import React from "react";
 
-const SupplierPanel: React.FC = () => {
+const SupplierPanel: React.FC = React.memo(() => {
   const dispatch = useDispatch();
+
+  // Redux states for machine and products
   const { components, isSupplierMode } = useSelector(
     (state: RootState) => state.machine
   );
   const { totalSales, products } = useSelector(
     (state: RootState) => state.product
   );
-
   const { collectedMoney } = useSelector((state: RootState) => state.payment);
 
+  // Local state for managing UI states
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showRefillModal, setShowRefillModal] = useState(false);
   const [password, setPassword] = useState("");
@@ -33,13 +40,13 @@ const SupplierPanel: React.FC = () => {
     null
   );
 
-  //Girilen şifrenin kaç defa girildiğini tutuyoruz
+  // Track the number of failed password attempts
   const [attemptCount, setAttemptCount] = useState(() => {
     const saved = localStorage.getItem("passwordAttempts");
     return saved ? parseInt(saved) : 0;
   });
 
-  //Girilen şifrenin 3 defa yanlış girildiğini bekleme süresini tutuyoruz
+  // Track cooldown period for password retries
   const [cooldownEndTime, setCooldownEndTime] = useState<number | undefined>(
     () => {
       const saved = localStorage.getItem("cooldownEndTime");
@@ -48,6 +55,8 @@ const SupplierPanel: React.FC = () => {
     }
   );
 
+  // Toggles supplier mode after verifying the password or directly exits.
+  // Applies cooldown if too many failed attempts occur.
   const handleToggleSupplierMode = () => {
     const now = Date.now();
     if (cooldownEndTime && now < cooldownEndTime) {
@@ -64,7 +73,11 @@ const SupplierPanel: React.FC = () => {
       dispatch(toggleSupplierMode());
     }
   };
-  //Makine operatörünün para içinde biriken parayı toplamasına yarar
+
+  /**
+   * Collects money stored in the vending machine.
+   * Displays a message if there is no money to collect.
+   */
   const handleCollectMoney = () => {
     if (collectedMoney > 0) {
       toast.success(`Collected ${collectedMoney} units from machine`);
@@ -78,6 +91,7 @@ const SupplierPanel: React.FC = () => {
     setShowRefillModal(true);
   };
 
+  // Handles the refill process for a specific product or all products.
   const handleRefillSubmit = () => {
     if (refillAmount <= 0) {
       toast.error("Please enter a valid amount");
@@ -102,6 +116,7 @@ const SupplierPanel: React.FC = () => {
     setSelectedProductId(null);
   };
 
+  // Updates the refill amount state based on user input.
   const handleRefillAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value === "") {
@@ -113,22 +128,26 @@ const SupplierPanel: React.FC = () => {
       }
     }
   };
-
+  // Prevents invalid characters in the input field.
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (["+", "-", "e", "E"].includes(e.key)) {
       e.preventDefault();
     }
   };
 
+  // Resets the machine, products, and payment states.
   const handleReset = () => {
     dispatch(resetProducts());
     dispatch(resetPayment());
     dispatch(resetMachine());
     toast.success("Machine has been reset");
   };
-
+  /**
+   * Handles the submission of the supplier password.
+   * Activates cooldown if the password is entered incorrectly multiple times.
+   */
   const handlePasswordSubmit = () => {
-    if (password === "aselsan") {
+    if (password === SUPPLIER_PASSWORD) {
       dispatch(toggleSupplierMode());
       setShowPasswordModal(false);
       setPassword("");
@@ -143,7 +162,7 @@ const SupplierPanel: React.FC = () => {
       localStorage.setItem("passwordAttempts", newAttemptCount.toString());
 
       if (newAttemptCount >= WRONG_PASSWORD_LIMIT) {
-        const newCooldownTime = Date.now() + 20000;
+        const newCooldownTime = Date.now() + COOLDOWN_TIME * 1000;
         setCooldownEndTime(newCooldownTime);
         localStorage.setItem("cooldownEndTime", newCooldownTime.toString());
         setAttemptCount(0);
@@ -151,7 +170,7 @@ const SupplierPanel: React.FC = () => {
         setShowPasswordModal(false);
         setPassword("");
         toast.error(
-          "Too many failed attempts. Notification sent to supplier. Please wait 20 seconds."
+          `Too many failed attempts. Notification sent to supplier. Please wait ${COOLDOWN_TIME} seconds.`
         );
       } else {
         toast.error(
@@ -163,6 +182,7 @@ const SupplierPanel: React.FC = () => {
     }
   };
 
+  // Clears the cooldown once the cooldown period ends.
   useEffect(() => {
     if (cooldownEndTime) {
       const timeoutId = setTimeout(() => {
@@ -173,13 +193,13 @@ const SupplierPanel: React.FC = () => {
       return () => clearTimeout(timeoutId);
     }
   }, [cooldownEndTime]);
-
+  // Submits the password when the Enter key is pressed.
   const handlePasswordKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       handlePasswordSubmit();
     }
   };
-
+  // Submits the refill form when the Enter key is pressed.
   const handleRefillKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       handleRefillSubmit();
@@ -258,41 +278,41 @@ const SupplierPanel: React.FC = () => {
         </div>
       )}
 
-            {showPasswordModal && (
-                <div className="password-modal">
-                    <div className="modal-content">
-                        <h3 className="modal-title">🔒 Enter Supplier Password</h3>
-                        <input
-                            className="password-input"
-                            type="password"
-                            placeholder="Enter password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            onKeyPress={handlePasswordKeyPress}
-                            autoFocus
-                        />
-                        <div className="button-group">
-                            <div
-                                className="button"
-                                onClick={() => {
-                                    setShowPasswordModal(false);
-                                    setPassword('');
-                                }}
-                                style={{ background: '#E74C3C' }}
-                            >
-                                Cancel
-                            </div>
-                            <div
-                                className="button"
-                                onClick={handlePasswordSubmit}
-                                style={{ background: '#27AE60' }}
-                            >
-                                Submit
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+      {showPasswordModal && (
+        <div className="password-modal">
+          <div className="modal-content">
+            <h3 className="modal-title">🔒 Enter Supplier Password</h3>
+            <input
+              className="password-input"
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyPress={handlePasswordKeyPress}
+              autoFocus
+            />
+            <div className="button-group">
+              <div
+                className="button"
+                onClick={() => {
+                  setShowPasswordModal(false);
+                  setPassword("");
+                }}
+                style={{ background: "#E74C3C" }}
+              >
+                Cancel
+              </div>
+              <div
+                className="button"
+                onClick={handlePasswordSubmit}
+                style={{ background: "#27AE60" }}
+              >
+                Submit
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showRefillModal && (
         <div className="confirm-dialog">
@@ -384,6 +404,6 @@ const SupplierPanel: React.FC = () => {
       )}
     </div>
   );
-};
+});
 
 export default SupplierPanel;

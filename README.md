@@ -237,3 +237,6 @@ WRONG_PASSWORD_LIMIT = 3     // Maksimum yanlış şifre denemesi
 
 // Ödeme
 INSERT_AMOUNTS = [1, 5, 10, 20] // Para ekleme miktarları
+
+// TEDARİKÇİ ŞİFRE
+SUPPLİER_PASSWORD = "aselsan" // Tedarikçi moduna girebilmek için koyulmuş şifre

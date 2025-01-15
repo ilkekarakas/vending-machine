@@ -9,7 +9,8 @@ const VendingMachineBody: React.FC = () => {
   const {
     products,
   } = useSelector((state: RootState) => state.product);
-
+  
+  // Show every product in products via ProductCard component
   return (
     <div className="vending-machine-body">
       <div className="product-grid">
@@ -21,6 +22,6 @@ const VendingMachineBody: React.FC = () => {
     </div>
   );
 
-}
+};
 
 export default VendingMachineBody;
