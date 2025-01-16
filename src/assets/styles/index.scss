@@ -1,3 +1,5 @@
+@use '../styles/common.scss' as *;
+
 .global {
     * {
         margin: 0;
@@ -30,7 +32,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: #1a1a1a;
-    color: #ecf0f1;
+    color: $text-light;
   }
   
   * {
