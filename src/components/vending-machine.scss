@@ -1,22 +1,23 @@
+@use '../assets/styles/common' as *;
+
 .vending-machine-container {
-    padding: 20px;
+    padding: $panel-padding;
     max-width: 1200px;
     margin: 0 auto;
   
-    @media (max-width: 768px) {
+    @media (max-width: $mobile-width) {
       padding: 10px;
     }
   
     .header-section {
-      text-align: center;
+      @extend .text-center;
       margin-bottom: 30px;
-      display: flex;
-      flex-direction: column;
+      @include flex-column;
       align-items: center;
       gap: 15px;
 
       .header {
-        color: #1abc9c;
+        color: $primary-color;
         text-transform: uppercase;
         letter-spacing: 2px;
         font-size: 1.8em;
@@ -24,41 +25,22 @@
       }
 
       .clear-cache-button {
-        padding: 8px 16px;
-        background: #34495e;
-        border: 1px solid #e74c3c;
-        border-radius: 6px;
-        color: #ecf0f1;
+        @extend .button-base;
+        background: $panel-background;
+        border: 1px solid $danger-color;
+        color: $text-light;
         font-size: 0.9em;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 6px;
 
         &:hover {
-          background: #e74c3c;
-          transform: translateY(-2px);
+          background: $danger-color;
         }
       }
     }
-  }
+}
   
-  .processing-overlay,
-  .dispensing-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 1.5em;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
+.processing-overlay,
+.dispensing-overlay {
+    @extend .full-overlay;
   
     &.dispensing-overlay {
       background: rgba(0, 0, 0, 0.9);
@@ -74,20 +56,4 @@
       content: '...';
       animation: dots 1.5s steps(4, end) infinite;
     }
-  
-    @keyframes dots {
-      0%, 20% { content: '.'; }
-      40% { content: '..'; }
-      60% { content: '...'; }
-      80%, 100% { content: ''; }
-    }
-  
-    @keyframes moveRobot {
-      from {
-        transform: translateY(0);
-      }
-      to {
-        transform: translateY(-10px);
-      }
-    }
-  }
+}

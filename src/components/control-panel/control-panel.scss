@@ -1,15 +1,16 @@
+@use '../../assets/styles/common' as *;
+
 .control-panel {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    background: #2c3e50;
-    border-radius: 10px;
+    background: $panel-background;
+    border-radius: $panel-radius;
+    padding: $panel-padding;
     color: white;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    box-shadow: $panel-shadow;
+    @include flex-column;
     min-width: 300px;
     max-width: 400px;
 
-    @media (max-width: 768px) {
+    @media (max-width: $mobile-width) {
       min-width: unset;
       max-width: unset;
       border-radius: 0;
@@ -17,21 +18,21 @@
     }
 
     .session-display {
-        text-align: center;
+        @extend .text-center;
         padding: 10px;
         margin: 15px 0;
-        background: linear-gradient(135deg, #2c3e50, #3498db);
-        border-radius: 8px;
+        background: linear-gradient(135deg, $panel-background, $accent-color);
+        border-radius: $panel-radius;
         color: white;
         font-size: 1.2em;
         font-weight: bold;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        box-shadow: $box-shadow-light;
 
         .timer {
-            font-family: 'Digital', monospace;
+            font-family: $font-family-digital;
             font-size: 1.4em;
             letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            @include text-shadow-glow;
         }
 
         .label {
