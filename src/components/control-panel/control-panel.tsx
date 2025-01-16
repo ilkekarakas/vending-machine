@@ -12,66 +12,68 @@ import { SESSION_DURATION } from '../../utils/environment-constants';
 const ControlPanel: React.FC = React.memo(() => {
   const dispatch = useDispatch();
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
-  const { insertedMoney, selectedPaymentMethod, isProcessingPayment, sessionEndTime } = useSelector((state: RootState) => state.payment);
+  const { insertedMoney, isProcessingPayment, sessionEndTime } = useSelector((state: RootState) => state.payment);
   const { selectedProduct } = useSelector((state: RootState) => state.product);
 
   // Handling session timeout
   useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    const handleSessionExpiration = () => {
+      if (insertedMoney > 0) {
+        dispatch(refundMoney());
+        toast.info(`Refunded ${insertedMoney} units due to session timeout`);
+      }
+      dispatch(selectPaymentMethod(null));
+      dispatch(selectProduct(null));
+      dispatch(setSessionEndTime(null));
+      setTimeLeft(0);
+      toast.warning('Session expired! Please select a product again.');
+    };
+
     if (selectedProduct && !isProcessingPayment) {
-      const now = Math.floor(Date.now() / 1000); // Current time in seconds
-      
+      const now = Math.floor(Date.now() / 1000);
+
       if (!sessionEndTime) {
-        // Set new session end time if not exists
         const newEndTime = now + SESSION_DURATION;
         dispatch(setSessionEndTime(newEndTime));
         setTimeLeft(SESSION_DURATION);
       } else {
-        // Calculate remaining time from persisted session end time
         const remaining = sessionEndTime - now;
         if (remaining <= 0) {
-          // Session already expired
           handleSessionExpiration();
-        } else {
-          // Resume from persisted time
-          setTimeLeft(remaining);
+          return;
         }
+        setTimeLeft(remaining);
       }
 
-      const timer = setInterval(() => {
+      timer = setInterval(() => {
         const currentTime = Math.floor(Date.now() / 1000);
-        setTimeLeft((prevTime) => {
-          if (prevTime === null) return null;
-          if (prevTime <= 0 || (sessionEndTime && currentTime >= sessionEndTime)) {
-            clearInterval(timer);
-            handleSessionExpiration();
-            return 0;
-          }
-          if (prevTime === 30) {
-            toast.warning('Session ending in 30 seconds!');
-          }
-          return prevTime - 1;
-        });
-      }, 1000);
+        const remaining = sessionEndTime ? sessionEndTime - currentTime : 0;
 
-      return () => clearInterval(timer);
+        if (remaining <= 0) {
+          clearInterval(timer);
+          handleSessionExpiration();
+          return;
+        }
+
+        if (remaining === 30) {
+          toast.warning('Session ending in 30 seconds!');
+        }
+
+        setTimeLeft(remaining);
+      }, 1000);
     } else {
       setTimeLeft(null);
       dispatch(setSessionEndTime(null));
     }
-  }, [selectedProduct, isProcessingPayment]);
 
-  const handleSessionExpiration = () => {
-    if (insertedMoney > 0) {
-      dispatch(refundMoney());
-      toast.info(`Refunded ${insertedMoney} units due to session timeout`);
-    }
-    if (selectedPaymentMethod) {
-      dispatch(selectPaymentMethod(null));
-    }
-    dispatch(selectProduct(null));
-    dispatch(setSessionEndTime(null));
-    toast.warning('Session expired! Please select a product again.');
-  };
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, [selectedProduct, isProcessingPayment, sessionEndTime, insertedMoney, dispatch]);
 
   return (
     <div className="control-panel">
@@ -84,7 +86,7 @@ const ControlPanel: React.FC = React.memo(() => {
         </div>
       )}
       <DisplayPanel />
-      <Payment   setTimeLeft={setTimeLeft}  />
+      <Payment setTimeLeft={setTimeLeft} />
     </div>
   );
 });
